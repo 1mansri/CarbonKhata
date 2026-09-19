@@ -32,8 +32,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <footer className="border-t border-border">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-1 px-4 py-6 text-xs text-muted-foreground sm:px-6 lg:px-8">
           <p>
-            LCA Data Portal, a BTP project. Live data from CPCB and Climate
-            TRACE.{" "}
+            LCA Data Portal, a BTP project. Live data from Climate TRACE.{" "}
             <Link href="/sources" className="underline underline-offset-2 hover:text-primary">
               See exact sources
             </Link>

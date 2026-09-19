@@ -8,8 +8,8 @@ export interface SyncResult {
 
 /**
  * Runs one adapter end to end: fetch raw records, normalize them, and
- * upsert into the repository. Both the seed script and the
- * `/api/sync/cpcb` refresh endpoint call this — the "how to sync a source"
+ * upsert into the repository. Both the seed script and each source's
+ * `/api/sync/*` refresh endpoint call this — the "how to sync a source"
  * logic lives in exactly one place.
  */
 export class SyncService {

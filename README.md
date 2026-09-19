@@ -1,7 +1,7 @@
 # LCA Data Portal
 
-A BTP (thesis) project: search an activity, get its LCA-relevant impact
-data, and clean your own datasets — built entirely on live, self-serve
+A BTP (thesis) project: search an activity, get a real per-unit emission
+factor, and clean your own datasets — built entirely on live, self-serve
 public APIs (no manually-downloaded files, no ecoinvent access; see
 [Data sources](#data-sources) below).
 
@@ -15,18 +15,12 @@ public APIs (no manually-downloaded files, no ecoinvent access; see
 
 ```bash
 pnpm install
-cp .env.example .env   # fill in DATA_GOV_IN_API_KEY (see below)
-pnpm prisma db seed    # syncs live CPCB data into dev.db
+cp .env.example .env
+pnpm prisma db seed    # syncs live Climate TRACE data into dev.db
 pnpm dev
 ```
 
-Open http://localhost:3000.
-
-### Getting a data.gov.in API key
-
-The live CPCB adapter needs a free key: register at
-[data.gov.in](https://data.gov.in), find it under your account's API
-keys, and put it in `.env` as `DATA_GOV_IN_API_KEY`.
+Open http://localhost:3000. No API key needed.
 
 ## Architecture
 
@@ -38,9 +32,8 @@ code:
   `DataSourceAdapter` (`fetch()`/`normalize()`), `ActivityRepository`,
   `CleaningRule`. No implementation logic lives here.
 - **`src/lib/sources/`** — one adapter per data source implementing
-  `DataSourceAdapter` (`datagovin.ts`, `cepi.ts`, `climatetrace.ts`).
-  Adding a new source means adding a new adapter here — nothing else
-  changes.
+  `DataSourceAdapter` (`climatetrace.ts`). Adding a new source means
+  adding a new adapter here — nothing else changes.
 - **`src/lib/repositories/`** — `PrismaActivityRepository` implements
   `ActivityRepository`, wrapping all Prisma calls. Services depend on
   the interface, not Prisma directly, so swapping databases or writing
@@ -71,25 +64,30 @@ so there's no self-serve way in. If that changes, add an
 `EcoinventAdapter` implementing `DataSourceAdapter` in
 `src/lib/sources/` — nothing else in the app needs to change.
 
-Every source below is a genuinely live, self-serve public API (no
-manual file downloads, no sales contact required to get a key):
-
 | Source | Fetch mode | What it provides |
 |---|---|---|
-| [data.gov.in](https://data.gov.in) (CPCB air quality) | Live API, free self-serve key, refreshable via `/sources` or `POST /api/sync/cpcb` | Real-time CPCB CAAQMS air-quality readings (PM2.5, NO2, SO2, CO, ...) per monitoring station across India |
-| [data.gov.in](https://data.gov.in) (CPCB CEPI) | Live API, same key, refreshable via `/sources` or `POST /api/sync/cepi` | CPCB's Comprehensive Environmental Pollution Index score per critically polluted industrial cluster (43 clusters, e.g. Agra, Ahmedabad), plus moratorium status |
-| [Climate TRACE](https://climatetrace.org) | Live API, **no key needed**, refreshable via `/sources` or `POST /api/sync/climatetrace` | Asset-level global emissions inventory (CC BY 4.0) — real named facilities (cement plants, steel mills, aluminum smelters, refineries, power stations, ...) across nearly every industrial/agriculture/land-use sector in India, each with a real emissions factor, plus a sector-level aggregate per (sector, asset type) |
+| [Climate TRACE](https://climatetrace.org) | Live API, **no key needed**, refreshable via `/sources` or `POST /api/sync/climatetrace` | Asset-level global emissions inventory (CC BY 4.0) — real named facilities (cement plants, steel mills, aluminum smelters, refineries, power stations, ...) across nearly every industrial/agriculture/land-use sector in India, each with a real per-unit emission factor, plus a sector-level aggregate per (sector, asset type) |
 
-Not every dataset listed on data.gov.in has an API — most are download-only
-unless the publishing ministry explicitly enabled one. There's no catalog
-API to discover which ones qualify; each has to be checked individually on
-data.gov.in itself.
+This is the only source kept in the product. Two others were built and
+then deliberately removed once it became clear they weren't the right
+fit — kept here as a record, not as a suggestion to re-add them:
 
-Sources considered and rejected for not being genuinely self-serve APIs:
-**Climatiq** (emission-factor API closest in spirit to ecoinvent, but API
-access requires contacting sales — no self-serve key) and **DEFRA/CEA**
-(authoritative but published as an annual downloadable file release, not
-an API).
+- **CPCB air quality / CEPI (data.gov.in)** — real, live, free, and
+  correctly labeled as `regulatory-monitoring` rather than LCA data. But
+  ambient monitoring readings and regional pollution scores aren't
+  per-unit-of-product data, so they didn't serve this project's actual
+  goal (searching for an activity's impact) and just diluted search
+  results. Removed.
+- **Climatiq** — an emission-factor API closest in spirit to ecoinvent,
+  rejected because real API access requires contacting sales, not a
+  self-serve key.
+- **DEFRA/CEA** — authoritative but published as an annual downloadable
+  file release, not an API.
+
+data.gov.in has no catalog/search API to discover which of its ~100k+
+datasets have live API access (most are download-only unless the
+publishing ministry explicitly enabled one) — each has to be checked
+individually on the site itself.
 
 ## Scripts
 

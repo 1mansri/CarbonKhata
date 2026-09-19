@@ -30,7 +30,7 @@ export default async function SourcesPage() {
           <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
             pnpm prisma db seed
           </code>{" "}
-          to pull in live CPCB data.
+          to pull in live emission factor data.
         </p>
       ) : (
         <div className="flex flex-col gap-4">

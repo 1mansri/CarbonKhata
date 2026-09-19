@@ -4,7 +4,5 @@
  * it should POST to.
  */
 export const SYNC_ENDPOINTS: Record<string, string> = {
-  "CPCB Air Quality (data.gov.in)": "/api/sync/cpcb",
   "Climate TRACE": "/api/sync/climatetrace",
-  "CPCB Industrial Pollution Index (data.gov.in)": "/api/sync/cepi",
 };

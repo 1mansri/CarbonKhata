@@ -19,12 +19,12 @@ export default async function Home({ searchParams }: PageProps<"/">) {
     <div className="flex flex-col gap-8">
       <div className="space-y-3">
         <h1 className="max-w-2xl text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-          Search live emission data for cement, steel, coal, and air quality
-          across India
+          Search real emission factors for cement, steel, coal, and aluminum
+          production in India
         </h1>
         <p className="max-w-xl text-muted-foreground">
-          Pulled live from CPCB and Climate TRACE. No ecoinvent license, no
-          signup, no paywall.
+          Pulled live from Climate TRACE, per tonne of product from real
+          facilities. No ecoinvent license, no signup, no paywall.
         </p>
         {totalActivities > 0 && (
           <p className="font-mono text-xs text-muted-foreground">
@@ -46,8 +46,8 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         <BulletList
           items={[
             "Not ecoinvent. This is free public data, not a licensed LCA database.",
-            "Each activity carries one indicator (CO2e or a pollutant), not a full LCIA.",
-            "Coverage is India-focused, across major industrial sectors and CPCB monitoring.",
+            "Each activity carries one indicator (CO2e), not a full multi-category LCIA.",
+            "Coverage is India-focused, across major industrial sectors.",
           ]}
         />
       </div>

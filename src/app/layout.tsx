@@ -17,7 +17,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "LCA Data Portal",
   description:
-    "Search live emission data for cement, steel, coal, and air quality across India. Free, no ecoinvent license needed.",
+    "Search real emission factors for cement, steel, coal, and aluminum production in India. Free, no ecoinvent license needed.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

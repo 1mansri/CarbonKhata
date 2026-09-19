@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 
 type KindFilter = DataKind | "all";
 
-const SEARCH_HINTS = ["cement", "steel", "coal", "aluminum", "air quality"];
+const SEARCH_HINTS = ["cement", "steel", "coal", "aluminum", "chemicals"];
 
 interface SearchResponse {
   activities: Activity[];
@@ -77,7 +77,7 @@ export function SearchView({
         <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Try &ldquo;cement&rdquo;, &ldquo;steel&rdquo;, or &ldquo;PM2.5&rdquo;"
+          placeholder="Try &ldquo;cement&rdquo;, &ldquo;steel&rdquo;, or &ldquo;aluminum&rdquo;"
           className="pl-9"
           aria-label="Search activities"
         />
