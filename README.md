@@ -1,8 +1,9 @@
 # LCA Data Portal
 
 A BTP (thesis) project: search an activity, get its LCA-relevant impact
-data, and clean your own datasets — built around live CPCB data (no
-ecoinvent access; see [Data sources](#data-sources) below).
+data, and clean your own datasets — built entirely on live, self-serve
+public APIs (no manually-downloaded files, no ecoinvent access; see
+[Data sources](#data-sources) below).
 
 ## Stack
 
@@ -37,7 +38,7 @@ code:
   `DataSourceAdapter` (`fetch()`/`normalize()`), `ActivityRepository`,
   `CleaningRule`. No implementation logic lives here.
 - **`src/lib/sources/`** — one adapter per data source implementing
-  `DataSourceAdapter` (currently just `datagovin.ts`). Adding a new
+  `DataSourceAdapter` (`datagovin.ts`, `climatetrace.ts`). Adding a new
   source means adding a new adapter here — nothing else changes.
 - **`src/lib/repositories/`** — `PrismaActivityRepository` implements
   `ActivityRepository`, wrapping all Prisma calls. Services depend on
@@ -64,20 +65,24 @@ without a schema change.
 
 **Ecoinvent is intentionally not included.** It requires a paid
 subscription for both its API and raw data exports, and this project
-doesn't have institutional access. If that changes, add an
+doesn't have institutional access — its API can't be called without one,
+so there's no self-serve way in. If that changes, add an
 `EcoinventAdapter` implementing `DataSourceAdapter` in
 `src/lib/sources/` — nothing else in the app needs to change.
 
-What's actually wired up:
+Every source below is a genuinely live, self-serve public API (no
+manual file downloads, no sales contact required to get a key):
 
 | Source | Fetch mode | What it provides |
 |---|---|---|
-| [data.gov.in](https://data.gov.in) (CPCB) | Live (API, refreshable via the "Refresh CPCB data" button on `/sources` or `POST /api/sync/cpcb`) | Real-time CPCB CAAQMS air-quality readings (PM2.5, NO2, SO2, CO, ...) per monitoring station across India |
-| [DEFRA UK GHG Conversion Factors](https://www.gov.uk/government/collections/government-conversion-factors-for-company-reporting) | Manual annual release, imported once | Per-unit emission factors across materials/fuels/transport/waste — the closest free substitute to ecoinvent's shape |
-| [CEA CO2 Baseline Database](https://cea.nic.in/cdm-co2-baseline-database/) | Manual annual release, imported once | India's official electricity grid emission factor |
+| [data.gov.in](https://data.gov.in) (CPCB) | Live API, free self-serve key, refreshable via `/sources` or `POST /api/sync/cpcb` | Real-time CPCB CAAQMS air-quality readings (PM2.5, NO2, SO2, CO, ...) per monitoring station across India |
+| [Climate TRACE](https://climatetrace.org) | Live API, **no key needed**, refreshable via `/sources` or `POST /api/sync/climatetrace` | Asset-level global emissions inventory (CC BY 4.0) — real named facilities (cement plants, steel mills, aluminum smelters, refineries, power stations, ...) across nearly every industrial/agriculture/land-use sector in India, each with a real emissions factor, plus a sector-level aggregate per (sector, asset type) |
 
-DEFRA/CEA adapters are not implemented yet — they need their release
-files dropped in `data/raw/` first.
+Sources considered and rejected for not being genuinely self-serve APIs:
+**Climatiq** (emission-factor API closest in spirit to ecoinvent, but API
+access requires contacting sales — no self-serve key) and **DEFRA/CEA**
+(authoritative but published as an annual downloadable file release, not
+an API).
 
 ## Scripts
 

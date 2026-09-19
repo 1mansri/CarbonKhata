@@ -5,17 +5,17 @@ import { useRouter } from "next/navigation";
 import { Loader2, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-async function triggerSync(): Promise<{ activityCount: number }> {
-  const res = await fetch("/api/sync/cpcb", { method: "POST" });
+async function triggerSync(endpoint: string): Promise<{ activityCount: number }> {
+  const res = await fetch(endpoint, { method: "POST" });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error ?? "Sync failed");
   return data;
 }
 
-export function SyncButton() {
+export function SyncButton({ endpoint, label = "Refresh" }: { endpoint: string; label?: string }) {
   const router = useRouter();
   const mutation = useMutation({
-    mutationFn: triggerSync,
+    mutationFn: () => triggerSync(endpoint),
     onSuccess: () => router.refresh(),
   });
 
@@ -32,7 +32,7 @@ export function SyncButton() {
         ) : (
           <RefreshCw />
         )}
-        Refresh CPCB data
+        {label}
       </Button>
       {mutation.isError && (
         <p className="max-w-xs text-right text-xs text-destructive">

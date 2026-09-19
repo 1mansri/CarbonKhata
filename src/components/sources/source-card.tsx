@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { DataSourceSummary } from "@/lib/domain/types";
 import { SyncButton } from "@/components/sources/sync-button";
+import { SYNC_ENDPOINTS } from "@/lib/sources/sync-endpoints";
 
 const FETCH_MODE_LABEL: Record<DataSourceSummary["fetchMode"], string> = {
   live: "Live",
@@ -10,6 +11,8 @@ const FETCH_MODE_LABEL: Record<DataSourceSummary["fetchMode"], string> = {
 };
 
 export function SourceCard({ source }: { source: DataSourceSummary }) {
+  const syncEndpoint = SYNC_ENDPOINTS[source.name];
+
   return (
     <Card>
       <CardHeader className="gap-2">
@@ -56,7 +59,7 @@ export function SourceCard({ source }: { source: DataSourceSummary }) {
             </div>
           </dl>
         </div>
-        {source.fetchMode === "live" && <SyncButton />}
+        {syncEndpoint && <SyncButton endpoint={syncEndpoint} label="Refresh data" />}
       </CardContent>
     </Card>
   );
