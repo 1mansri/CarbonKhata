@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// A place data was fetched/imported from (data.gov.in/CPCB, DEFRA, CEA, or
+// a manual user upload). Every Activity is attributed to exactly one.
+model DataSource {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  url         String?
+  licenseNote String?
+  fetchMode   String // "live" | "periodic-import" | "user-upload"
+  lastSyncedAt DateTime?
+  createdAt   DateTime @default(now())
+
+  activities Activity[]
+}
+
+// A searchable "activity" (e.g. "Cement production", "Electricity, India grid mix").
+// Shape mirrors ecoinvent/openLCA's activity/exchange model so a future
+// ecoinvent adapter can map into it without a schema change.
+model Activity {
+  id            String   @id @default(cuid())
+  name          String
+  category      String?
+  sector        String?
+  unit          String
+  geography     String?
+  referenceYear Int?
+  description   String?
+  externalRef   String? // source's own id/code for this activity, if any
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sourceId String
+  source   DataSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  indicators ImpactIndicator[]
+
+  @@unique([sourceId, externalRef])
+  @@index([sourceId])
+  @@index([name])
+  @@index([category])
+}
+
+// One impact/emission figure for an Activity (e.g. GWP100 = 0.9 kg CO2e/kg).
+model ImpactIndicator {
+  id            String  @id @default(cuid())
+  indicatorName String // e.g. "GWP100", "SOx emissions", "Water use"
+  value         Float
+  unit          String
+  method        String? // e.g. "IPCC 2021", "CPCB effluent standard"
+
+  activityId String
+  activity   Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+
+  @@index([activityId])
+}
