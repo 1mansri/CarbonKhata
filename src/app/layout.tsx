@@ -17,7 +17,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "LCA Data Portal",
   description:
-    "Search life cycle assessment activity data, browse CPCB standards, and clean your own LCA datasets.",
+    "Search live emission data for cement, steel, coal, and air quality across India. Free, no ecoinvent license needed.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

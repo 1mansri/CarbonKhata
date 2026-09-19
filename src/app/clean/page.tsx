@@ -1,17 +1,21 @@
 import { CleanView } from "@/components/clean/clean-view";
+import { BulletList } from "@/components/shared/bullet-list";
 
 export default function CleanPage() {
   return (
     <div className="flex flex-col gap-8">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight text-foreground">
-          Upload &amp; clean your data
+      <div className="space-y-3">
+        <h1 className="max-w-2xl text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          Clean a messy LCA spreadsheet in seconds
         </h1>
-        <p className="max-w-2xl text-muted-foreground">
-          Drop in a CSV or Excel file. We trim whitespace, normalize common
-          units, remove exact duplicate rows, and flag missing values — then
-          you can download the cleaned result.
-        </p>
+        <BulletList
+          className="max-w-xl"
+          items={[
+            "Fixes whitespace, unit mismatches, duplicate rows, and missing values",
+            "Runs in your browser. Your file never reaches our server.",
+            "Download the cleaned CSV as soon as it finishes",
+          ]}
+        />
       </div>
       <CleanView />
     </div>

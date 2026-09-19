@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 
 type KindFilter = DataKind | "all";
 
-const SEARCH_HINTS = ["Delhi", "Mumbai", "PM2.5", "NO2", "air quality"];
+const SEARCH_HINTS = ["cement", "steel", "coal", "aluminum", "air quality"];
 
 interface SearchResponse {
   activities: Activity[];
@@ -77,7 +77,7 @@ export function SearchView({
         <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search an activity, e.g. &ldquo;air quality Delhi&rdquo;"
+          placeholder="Try &ldquo;cement&rdquo;, &ldquo;steel&rdquo;, or &ldquo;PM2.5&rdquo;"
           className="pl-9"
           aria-label="Search activities"
         />
@@ -114,8 +114,9 @@ export function SearchView({
 
       {showRelatedBanner && (
         <p className="rounded-lg border border-dashed border-border bg-muted/50 px-4 py-2.5 text-sm text-muted-foreground">
-          Nothing matches <span className="font-medium text-foreground">&ldquo;{query}&rdquo;</span>{" "}
-          exactly — but you may be looking for one of these.
+          No exact match for{" "}
+          <span className="font-medium text-foreground">&ldquo;{query}&rdquo;</span>.
+          Here&apos;s what&apos;s close.
         </p>
       )}
 

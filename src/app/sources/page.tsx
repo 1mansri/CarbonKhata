@@ -14,12 +14,13 @@ export default async function SourcesPage() {
     <div className="flex flex-col gap-8">
       <div className="space-y-2">
         <h1 className="text-3xl font-semibold tracking-tight text-foreground">
-          Data sources
+          Every number here traces back to a real source
         </h1>
         <p className="max-w-2xl text-muted-foreground">
-          None of these give full multi-category LCA results — see each
-          badge below. Ecoinvent isn&apos;t included; it needs a paid
-          license this project doesn&apos;t have.
+          Check the license, the last sync time, and the record count for
+          yourself. No source below gives full multi-category LCA results.
+          Ecoinvent isn&apos;t included; it needs a paid license this project
+          doesn&apos;t have.
         </p>
       </div>
 
