@@ -16,11 +16,13 @@ public APIs (no manually-downloaded files, no ecoinvent access; see
 ```bash
 pnpm install
 cp .env.example .env
-pnpm prisma db seed    # syncs live Climate TRACE data into dev.db
+pnpm prisma db seed    # syncs live Climate TRACE + Ember data into dev.db
 pnpm dev
 ```
 
-Open http://localhost:3000. No API key needed.
+Open http://localhost:3000. Climate TRACE needs no key; Ember needs a
+free `EMBER_API_KEY` (see [Data sources](#data-sources)) or its sync is
+skipped automatically.
 
 ## Architecture
 
@@ -32,8 +34,8 @@ code:
   `DataSourceAdapter` (`fetch()`/`normalize()`), `ActivityRepository`,
   `CleaningRule`. No implementation logic lives here.
 - **`src/lib/sources/`** — one adapter per data source implementing
-  `DataSourceAdapter` (`climatetrace.ts`). Adding a new source means
-  adding a new adapter here — nothing else changes.
+  `DataSourceAdapter` (`climatetrace.ts`, `ember.ts`). Adding a new
+  source means adding a new adapter here — nothing else changes.
 - **`src/lib/repositories/`** — `PrismaActivityRepository` implements
   `ActivityRepository`, wrapping all Prisma calls. Services depend on
   the interface, not Prisma directly, so swapping databases or writing
@@ -67,6 +69,7 @@ so there's no self-serve way in. If that changes, add an
 | Source | Fetch mode | What it provides |
 |---|---|---|
 | [Climate TRACE](https://climatetrace.org) | Live API, **no key needed**, refreshable via `/sources` or `POST /api/sync/climatetrace` | Asset-level global emissions inventory (CC BY 4.0) — real named facilities (cement plants, steel mills, aluminum smelters, refineries, power stations, ...) across nearly every industrial/agriculture/land-use sector in India, each with a real per-unit emission factor, plus a sector-level aggregate per (sector, asset type) |
+| [Ember](https://ember-energy.org/data/api/) | Live API, free self-serve key, refreshable via `/sources` or `POST /api/sync/ember` | India's grid electricity carbon intensity (gCO2/kWh) and generation mix by fuel type for the latest year — the background electricity factor almost every product LCA needs somewhere in its inventory |
 
 This is the only source kept in the product. Two others were built and
 then deliberately removed once it became clear they weren't the right
@@ -88,6 +91,11 @@ data.gov.in has no catalog/search API to discover which of its ~100k+
 datasets have live API access (most are download-only unless the
 publishing ministry explicitly enabled one) — each has to be checked
 individually on the site itself.
+
+Ember's real endpoint and OpenAPI spec (`api.ember-energy.org/v1/openapi.json`)
+were verified directly; its marketing/signup page is behind bot
+protection that blocks automated fetches, so getting the key is a manual
+step (same as data.gov.in).
 
 ## Scripts
 

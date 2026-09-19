@@ -5,4 +5,5 @@
  */
 export const SYNC_ENDPOINTS: Record<string, string> = {
   "Climate TRACE": "/api/sync/climatetrace",
+  "Ember (grid electricity)": "/api/sync/ember",
 };
