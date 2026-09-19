@@ -18,4 +18,8 @@ export class SearchService {
   getById(id: string) {
     return this.repository.findById(id);
   }
+
+  listSources() {
+    return this.repository.listSources();
+  }
 }

@@ -45,3 +45,9 @@ export interface DataSourceInfo {
   licenseNote?: string;
   fetchMode: FetchMode;
 }
+
+export interface DataSourceSummary extends DataSourceInfo {
+  id: string;
+  lastSyncedAt: Date | null;
+  activityCount: number;
+}

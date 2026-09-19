@@ -1,4 +1,9 @@
-import type { Activity, ActivityData, DataSourceInfo } from "@/lib/domain/types";
+import type {
+  Activity,
+  ActivityData,
+  DataSourceInfo,
+  DataSourceSummary,
+} from "@/lib/domain/types";
 
 export interface ActivitySearchParams {
   query?: string;
@@ -19,4 +24,5 @@ export interface ActivityRepository {
     source: DataSourceInfo,
     activities: ActivityData[],
   ): Promise<number>;
+  listSources(): Promise<DataSourceSummary[]>;
 }

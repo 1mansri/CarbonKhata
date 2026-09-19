@@ -4,7 +4,13 @@ import type {
   ActivityRepository,
   ActivitySearchParams,
 } from "@/lib/domain/activity-repository";
-import type { Activity, ActivityData, DataSourceInfo } from "@/lib/domain/types";
+import type {
+  Activity,
+  ActivityData,
+  DataSourceInfo,
+  DataSourceSummary,
+  FetchMode,
+} from "@/lib/domain/types";
 
 const activityInclude = {
   source: true,
@@ -142,5 +148,22 @@ export class PrismaActivityRepository implements ActivityRepository {
     }
 
     return count;
+  }
+
+  async listSources(): Promise<DataSourceSummary[]> {
+    const rows = await prisma.dataSource.findMany({
+      include: { _count: { select: { activities: true } } },
+      orderBy: { name: "asc" },
+    });
+
+    return rows.map((row) => ({
+      id: row.id,
+      name: row.name,
+      url: row.url ?? undefined,
+      licenseNote: row.licenseNote ?? undefined,
+      fetchMode: row.fetchMode as FetchMode,
+      lastSyncedAt: row.lastSyncedAt,
+      activityCount: row._count.activities,
+    }));
   }
 }
