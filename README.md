@@ -38,8 +38,9 @@ code:
   `DataSourceAdapter` (`fetch()`/`normalize()`), `ActivityRepository`,
   `CleaningRule`. No implementation logic lives here.
 - **`src/lib/sources/`** — one adapter per data source implementing
-  `DataSourceAdapter` (`datagovin.ts`, `climatetrace.ts`). Adding a new
-  source means adding a new adapter here — nothing else changes.
+  `DataSourceAdapter` (`datagovin.ts`, `cepi.ts`, `climatetrace.ts`).
+  Adding a new source means adding a new adapter here — nothing else
+  changes.
 - **`src/lib/repositories/`** — `PrismaActivityRepository` implements
   `ActivityRepository`, wrapping all Prisma calls. Services depend on
   the interface, not Prisma directly, so swapping databases or writing
@@ -75,8 +76,14 @@ manual file downloads, no sales contact required to get a key):
 
 | Source | Fetch mode | What it provides |
 |---|---|---|
-| [data.gov.in](https://data.gov.in) (CPCB) | Live API, free self-serve key, refreshable via `/sources` or `POST /api/sync/cpcb` | Real-time CPCB CAAQMS air-quality readings (PM2.5, NO2, SO2, CO, ...) per monitoring station across India |
+| [data.gov.in](https://data.gov.in) (CPCB air quality) | Live API, free self-serve key, refreshable via `/sources` or `POST /api/sync/cpcb` | Real-time CPCB CAAQMS air-quality readings (PM2.5, NO2, SO2, CO, ...) per monitoring station across India |
+| [data.gov.in](https://data.gov.in) (CPCB CEPI) | Live API, same key, refreshable via `/sources` or `POST /api/sync/cepi` | CPCB's Comprehensive Environmental Pollution Index score per critically polluted industrial cluster (43 clusters, e.g. Agra, Ahmedabad), plus moratorium status |
 | [Climate TRACE](https://climatetrace.org) | Live API, **no key needed**, refreshable via `/sources` or `POST /api/sync/climatetrace` | Asset-level global emissions inventory (CC BY 4.0) — real named facilities (cement plants, steel mills, aluminum smelters, refineries, power stations, ...) across nearly every industrial/agriculture/land-use sector in India, each with a real emissions factor, plus a sector-level aggregate per (sector, asset type) |
+
+Not every dataset listed on data.gov.in has an API — most are download-only
+unless the publishing ministry explicitly enabled one. There's no catalog
+API to discover which ones qualify; each has to be checked individually on
+data.gov.in itself.
 
 Sources considered and rejected for not being genuinely self-serve APIs:
 **Climatiq** (emission-factor API closest in spirit to ecoinvent, but API
