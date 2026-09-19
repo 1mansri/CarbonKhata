@@ -11,6 +11,7 @@ import type {
   DataSourceSummary,
   FetchMode,
 } from "@/lib/domain/types";
+import type { DataKind } from "@/lib/domain/data-kind";
 
 const activityInclude = {
   source: true,
@@ -34,6 +35,7 @@ function toDomain(row: ActivityWithRelations): Activity {
     externalRef: row.externalRef ?? "",
     sourceId: row.sourceId,
     sourceName: row.source.name,
+    dataKind: (row.source.dataKind as DataKind | null) ?? null,
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
     indicators: row.indicators.map((indicator) => ({
@@ -96,12 +98,14 @@ export class PrismaActivityRepository implements ActivityRepository {
         url: source.url,
         licenseNote: source.licenseNote,
         fetchMode: source.fetchMode,
+        dataKind: source.dataKind,
         lastSyncedAt: new Date(),
       },
       update: {
         url: source.url,
         licenseNote: source.licenseNote,
         fetchMode: source.fetchMode,
+        dataKind: source.dataKind,
         lastSyncedAt: new Date(),
       },
     });
@@ -171,6 +175,7 @@ export class PrismaActivityRepository implements ActivityRepository {
       url: row.url ?? undefined,
       licenseNote: row.licenseNote ?? undefined,
       fetchMode: row.fetchMode as FetchMode,
+      dataKind: row.dataKind as DataKind,
       lastSyncedAt: row.lastSyncedAt,
       activityCount: row._count.activities,
     }));

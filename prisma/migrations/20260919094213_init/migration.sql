@@ -1,3 +1,6 @@
+◇ injected env (2) from .env
+Loaded Prisma config from prisma.config.ts.
+
 -- CreateTable
 CREATE TABLE "DataSource" (
     "id" TEXT NOT NULL PRIMARY KEY,
@@ -5,6 +8,7 @@ CREATE TABLE "DataSource" (
     "url" TEXT,
     "licenseNote" TEXT,
     "fetchMode" TEXT NOT NULL,
+    "dataKind" TEXT,
     "lastSyncedAt" DATETIME,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

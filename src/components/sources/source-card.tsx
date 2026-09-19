@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { DataSourceSummary } from "@/lib/domain/types";
 import { SyncButton } from "@/components/sources/sync-button";
 import { SYNC_ENDPOINTS } from "@/lib/sources/sync-endpoints";
+import { DataKindBadge } from "@/components/shared/data-kind-badge";
 
 const FETCH_MODE_LABEL: Record<DataSourceSummary["fetchMode"], string> = {
   live: "Live",
@@ -19,6 +20,7 @@ export function SourceCard({ source }: { source: DataSourceSummary }) {
         <div className="flex flex-wrap items-start justify-between gap-3">
           <CardTitle className="text-base">{source.name}</CardTitle>
           <div className="flex gap-1.5">
+            <DataKindBadge dataKind={source.dataKind} />
             <Badge variant={source.fetchMode === "live" ? "default" : "secondary"}>
               {FETCH_MODE_LABEL[source.fetchMode]}
             </Badge>

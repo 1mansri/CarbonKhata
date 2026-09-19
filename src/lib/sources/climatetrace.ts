@@ -96,6 +96,7 @@ export class ClimateTraceAdapter implements DataSourceAdapter {
     licenseNote:
       "Creative Commons Attribution 4.0 International; asset-level global emissions inventory, no API key required.",
     fetchMode: "live",
+    dataKind: "emission-factor",
   };
 
   async fetch(): Promise<unknown[]> {

@@ -6,6 +6,7 @@ import { PrismaActivityRepository } from "@/lib/repositories/prisma-activity-rep
 import { SearchService } from "@/lib/services/search-service";
 import { IndicatorTable } from "@/components/activity/indicator-table";
 import { DownloadButtons } from "@/components/activity/download-buttons";
+import { DataKindBadge } from "@/components/shared/data-kind-badge";
 
 export default async function ActivityDetailPage({
   params,
@@ -30,6 +31,7 @@ export default async function ActivityDetailPage({
 
       <div className="space-y-3">
         <div className="flex flex-wrap gap-1.5">
+          <DataKindBadge dataKind={activity.dataKind} />
           {activity.category && (
             <Badge variant="secondary">{activity.category}</Badge>
           )}

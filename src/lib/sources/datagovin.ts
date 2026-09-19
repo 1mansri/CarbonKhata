@@ -1,5 +1,9 @@
 import type { DataSourceAdapter } from "@/lib/domain/data-source-adapter";
-import type { ActivityData, DataSourceInfo } from "@/lib/domain/types";
+import type {
+  ActivityData,
+  DataSourceInfo,
+  ImpactIndicatorData,
+} from "@/lib/domain/types";
 
 const RESOURCE_ID = "3b01bcb8-0b14-4abf-b6f2-c1bfd384ba69"; // CPCB "Real time Air Quality Index from various locations"
 const API_BASE = `https://api.data.gov.in/resource/${RESOURCE_ID}`;
@@ -41,6 +45,24 @@ function slugify(value: string): string {
     .replace(/(^-|-$)/g, "");
 }
 
+// data.gov.in occasionally repeats the same pollutant reading for a
+// station within one page — keep one indicator per pollutant.
+function dedupeByPollutant(records: RawAqiRecord[]): ImpactIndicatorData[] {
+  const byPollutant = new Map<string, RawAqiRecord>();
+  for (const record of records) {
+    byPollutant.set(record.pollutant_id, record);
+  }
+
+  return Array.from(byPollutant.values())
+    .map((r) => ({
+      indicatorName: r.pollutant_id,
+      value: Number(r.avg_value),
+      unit: unitFor(r.pollutant_id),
+      method: `CPCB CAAQMS live reading, ${r.last_update}`,
+    }))
+    .filter((indicator) => Number.isFinite(indicator.value));
+}
+
 export class DataGovInCpcbAdapter implements DataSourceAdapter {
   readonly info: DataSourceInfo = {
     name: "CPCB Air Quality (data.gov.in)",
@@ -48,6 +70,7 @@ export class DataGovInCpcbAdapter implements DataSourceAdapter {
     licenseNote:
       "Government Open Data License - India (GODL); live CAAQMS station readings published by CPCB via data.gov.in.",
     fetchMode: "live",
+    dataKind: "regulatory-monitoring",
   };
 
   constructor(private readonly apiKey: string) {}
@@ -105,14 +128,7 @@ export class DataGovInCpcbAdapter implements DataSourceAdapter {
         referenceYear,
         description: `CPCB CAAQMS station at lat ${first.latitude}, lon ${first.longitude}. Last updated ${first.last_update}.`,
         externalRef: `cpcb-aqi:${slugify(first.state)}-${slugify(first.city)}-${slugify(first.station)}`,
-        indicators: group
-          .map((r) => ({
-            indicatorName: r.pollutant_id,
-            value: Number(r.avg_value),
-            unit: unitFor(r.pollutant_id),
-            method: `CPCB CAAQMS live reading, ${r.last_update}`,
-          }))
-          .filter((indicator) => Number.isFinite(indicator.value)),
+        indicators: dedupeByPollutant(group),
       });
     }
 

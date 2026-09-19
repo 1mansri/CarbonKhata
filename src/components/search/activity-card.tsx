@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { DataKindBadge } from "@/components/shared/data-kind-badge";
 import type { Activity } from "@/lib/domain/types";
 
 export function ActivityCard({ activity }: { activity: Activity }) {
@@ -22,6 +23,7 @@ export function ActivityCard({ activity }: { activity: Activity }) {
             </CardTitle>
           </div>
           <div className="flex flex-wrap gap-1.5">
+            <DataKindBadge dataKind={activity.dataKind} />
             {activity.category && (
               <Badge variant="secondary">{activity.category}</Badge>
             )}
@@ -37,9 +39,9 @@ export function ActivityCard({ activity }: { activity: Activity }) {
           )}
           {previewIndicators.length > 0 && (
             <dl className="space-y-1">
-              {previewIndicators.map((indicator) => (
+              {previewIndicators.map((indicator, i) => (
                 <div
-                  key={indicator.indicatorName}
+                  key={`${indicator.indicatorName}-${i}`}
                   className="flex items-center justify-between text-sm"
                 >
                   <dt className="text-muted-foreground">

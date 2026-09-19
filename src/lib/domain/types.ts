@@ -4,6 +4,8 @@
  * importing the generated client everywhere.
  */
 
+import type { DataKind } from "@/lib/domain/data-kind";
+
 export interface ImpactIndicatorData {
   indicatorName: string;
   value: number;
@@ -33,6 +35,7 @@ export interface Activity extends ActivityData {
   id: string;
   sourceId: string;
   sourceName: string;
+  dataKind: DataKind | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -44,6 +47,7 @@ export interface DataSourceInfo {
   url?: string;
   licenseNote?: string;
   fetchMode: FetchMode;
+  dataKind: DataKind;
 }
 
 export interface DataSourceSummary extends DataSourceInfo {

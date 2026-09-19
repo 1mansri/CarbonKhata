@@ -15,6 +15,7 @@ model DataSource {
   url         String?
   licenseNote String?
   fetchMode   String // "live" | "periodic-import" | "user-upload"
+  dataKind    String? // "regulatory-monitoring" | "emission-factor" — see src/lib/domain/data-kind.ts
   lastSyncedAt DateTime?
   createdAt   DateTime @default(now())
 

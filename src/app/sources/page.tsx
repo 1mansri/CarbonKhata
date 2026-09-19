@@ -17,11 +17,9 @@ export default async function SourcesPage() {
           Data sources
         </h1>
         <p className="max-w-2xl text-muted-foreground">
-          Every activity in this portal is attributed to exactly one of
-          these sources. Ecoinvent is intentionally not included — it
-          requires a paid institutional license this project doesn&apos;t
-          have. If that changes, a new adapter can be added without
-          touching the rest of the app.
+          None of these give full multi-category LCA results — see each
+          badge below. Ecoinvent isn&apos;t included; it needs a paid
+          license this project doesn&apos;t have.
         </p>
       </div>
 

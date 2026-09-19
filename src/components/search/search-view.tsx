@@ -8,6 +8,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ActivityCard } from "@/components/search/activity-card";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import type { Activity } from "@/lib/domain/types";
+import { DATA_KIND_META, type DataKind } from "@/lib/domain/data-kind";
+import { cn } from "@/lib/utils";
+
+type KindFilter = DataKind | "all";
 
 const SEARCH_HINTS = ["Delhi", "Mumbai", "PM2.5", "NO2", "air quality"];
 
@@ -35,6 +39,7 @@ export function SearchView({
   initialExactMatch?: boolean;
 }) {
   const [query, setQuery] = useState(initialQuery);
+  const [kindFilter, setKindFilter] = useState<KindFilter>("all");
   const debouncedQuery = useDebouncedValue(query, 150);
 
   const { data, isFetching, isError } = useQuery({
@@ -47,10 +52,23 @@ export function SearchView({
     placeholderData: keepPreviousData,
   });
 
-  const activities = data?.activities ?? [];
+  const allActivities = data?.activities ?? [];
+  const activities =
+    kindFilter === "all"
+      ? allActivities
+      : allActivities.filter((a) => a.dataKind === kindFilter);
   const exactMatch = data?.exactMatch ?? true;
   const showRelatedBanner = !exactMatch && activities.length > 0;
   const showEmptyState = !isFetching && activities.length === 0;
+
+  const kindCounts = allActivities.reduce<Partial<Record<DataKind, number>>>(
+    (acc, a) => {
+      if (a.dataKind) acc[a.dataKind] = (acc[a.dataKind] ?? 0) + 1;
+      return acc;
+    },
+    {},
+  );
+  const presentKinds = Object.keys(kindCounts) as DataKind[];
 
   return (
     <div className="flex flex-col gap-6">
@@ -67,6 +85,26 @@ export function SearchView({
           <Loader2 className="absolute right-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground" />
         )}
       </div>
+
+      {presentKinds.length > 1 && (
+        <div className="flex flex-wrap gap-2">
+          <FilterPill
+            active={kindFilter === "all"}
+            onClick={() => setKindFilter("all")}
+          >
+            All ({allActivities.length})
+          </FilterPill>
+          {presentKinds.map((kind) => (
+            <FilterPill
+              key={kind}
+              active={kindFilter === kind}
+              onClick={() => setKindFilter(kind)}
+            >
+              {DATA_KIND_META[kind].label} ({kindCounts[kind]})
+            </FilterPill>
+          ))}
+        </div>
+      )}
 
       {isError && (
         <p className="text-sm text-destructive">
@@ -112,5 +150,30 @@ export function SearchView({
             ))}
       </div>
     </div>
+  );
+}
+
+function FilterPill({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "rounded-full border px-3 py-1 text-xs transition-colors",
+        active
+          ? "border-primary bg-primary/10 text-primary"
+          : "border-border text-muted-foreground hover:border-primary/50 hover:text-primary",
+      )}
+    >
+      {children}
+    </button>
   );
 }
