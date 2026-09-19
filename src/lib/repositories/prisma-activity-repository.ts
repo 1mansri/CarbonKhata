@@ -79,6 +79,15 @@ export class PrismaActivityRepository implements ActivityRepository {
     return row ? toDomain(row) : null;
   }
 
+  async listAll() {
+    const rows = await prisma.activity.findMany({
+      include: activityInclude,
+      orderBy: { name: "asc" },
+    });
+
+    return rows.map(toDomain);
+  }
+
   async upsertFromSource(source: DataSourceInfo, activities: ActivityData[]) {
     const dataSource = await prisma.dataSource.upsert({
       where: { name: source.name },

@@ -20,6 +20,8 @@ export interface ActivitySearchParams {
 export interface ActivityRepository {
   search(params: ActivitySearchParams): Promise<Activity[]>;
   findById(id: string): Promise<Activity | null>;
+  /** All activities, for building an in-memory fuzzy-search index. */
+  listAll(): Promise<Activity[]>;
   upsertFromSource(
     source: DataSourceInfo,
     activities: ActivityData[],

@@ -1,5 +1,4 @@
-import { PrismaActivityRepository } from "@/lib/repositories/prisma-activity-repository";
-import { SearchService } from "@/lib/services/search-service";
+import { fuzzySearchService } from "@/lib/services/fuzzy-search-singleton";
 import { SearchView } from "@/components/search/search-view";
 
 export default async function Home({ searchParams }: PageProps<"/">) {
@@ -7,8 +6,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
   const query =
     typeof params.q === "string" ? params.q : Array.isArray(params.q) ? params.q[0] : "";
 
-  const service = new SearchService(new PrismaActivityRepository());
-  const initialActivities = await service.search({ query: query || undefined, limit: 60 });
+  const initial = await fuzzySearchService.search(query, 60);
 
   return (
     <div className="flex flex-col gap-8">
@@ -21,7 +19,11 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           then download what you find.
         </p>
       </div>
-      <SearchView initialQuery={query} initialActivities={initialActivities} />
+      <SearchView
+        initialQuery={query}
+        initialActivities={initial.activities}
+        initialExactMatch={initial.exactMatch}
+      />
     </div>
   );
 }
