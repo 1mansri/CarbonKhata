@@ -21,9 +21,6 @@ export function Wordmark() {
   return (
     <span className="flex items-baseline gap-2">
       <span className="display text-[1.05rem] font-semibold tracking-tight">{BRAND.name}</span>
-      <span lang="hi" className="font-hindi text-xs text-muted-foreground">
-        {BRAND.nameHi}
-      </span>
     </span>
   );
 }
