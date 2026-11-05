@@ -1,5 +1,6 @@
 export const navLinks = [
-  { href: "/", label: "Search" },
-  { href: "/clean", label: "Clean Data" },
-  { href: "/sources", label: "Sources" },
+  { href: "/", label: "Projects" },
+  { href: "/library", label: "Library" },
+  { href: "/import", label: "Import BoQ" },
+  { href: "/method", label: "Method" },
 ] as const;

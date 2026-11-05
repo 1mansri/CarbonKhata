@@ -9,6 +9,15 @@ const PAGE_LIMIT = 10000;
 // otherwise we'd flood the DB with thousands of near-duplicate rows (e.g.
 // hundreds of district-level "cattle pasture" aggregates).
 const NAMED_ASSET_GROUP_CEILING = 20;
+// Only sectors that make construction materials or the electricity they
+// use — everything else (forest fires, livestock, shipping) is noise for an
+// embodied-carbon tool.
+const CONSTRUCTION_SECTORS = new Set([
+  "cement",
+  "iron-and-steel",
+  "aluminum",
+  "electricity-generation",
+]);
 
 interface RawEmissionsSummary {
   Gas: string;
@@ -118,6 +127,7 @@ export class ClimateTraceAdapter implements DataSourceAdapter {
     const groups = new Map<string, RawAsset[]>();
 
     for (const asset of assets) {
+      if (!CONSTRUCTION_SECTORS.has(asset.Sector)) continue;
       const key = `${asset.Sector}::${asset.AssetType}`;
       const group = groups.get(key) ?? [];
       group.push(asset);

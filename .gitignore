@@ -50,3 +50,6 @@ next-env.d.ts
 !/data/raw/.gitkeep
 
 /src/generated/prisma
+
+# playwright MCP screenshots/snapshots
+/.playwright-mcp/

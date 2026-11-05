@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "tsx --test \"src/**/*.test.ts\"",
+    "gen:materials": "node scripts/gen-materials.mjs data/extracted/india_materials.json src/data/lca/india-materials.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

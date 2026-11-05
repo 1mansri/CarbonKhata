@@ -160,6 +160,18 @@ export class PrismaActivityRepository implements ActivityRepository {
       count += 1;
     }
 
+    // A sync replaces the source's contents: drop rows it no longer returns
+    // (e.g. sectors removed from an adapter). Skipped on an empty result so
+    // a failed fetch can never wipe a source.
+    if (activities.length > 0) {
+      await prisma.activity.deleteMany({
+        where: {
+          sourceId: dataSource.id,
+          externalRef: { notIn: activities.map((a) => a.externalRef) },
+        },
+      });
+    }
+
     return count;
   }
 

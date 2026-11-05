@@ -1,56 +1,33 @@
-import { fuzzySearchService } from "@/lib/services/fuzzy-search-singleton";
-import { SearchService } from "@/lib/services/search-service";
-import { PrismaActivityRepository } from "@/lib/repositories/prisma-activity-repository";
-import { SearchView } from "@/components/search/search-view";
-import { BulletList } from "@/components/shared/bullet-list";
+import { SteelRoutes } from "@/components/home/steel-routes";
+import { ProjectList } from "@/components/home/project-list";
+import { Templates } from "@/components/home/templates";
+import { BRAND } from "@/lib/brand";
+import { INDIA_SOURCES } from "@/data/lca/india-materials";
 
-export default async function Home({ searchParams }: PageProps<"/">) {
-  const params = await searchParams;
-  const query =
-    typeof params.q === "string" ? params.q : Array.isArray(params.q) ? params.q[0] : "";
+/** Distinct EPD documents (one EPD can declare several products). */
+const EPD_DOCUMENTS = new Set(
+  INDIA_SOURCES.map((s) => s.bibtex.fields.number).filter(Boolean),
+).size;
 
-  const [initial, sources] = await Promise.all([
-    fuzzySearchService.search(query, 60),
-    new SearchService(new PrismaActivityRepository()).listSources(),
-  ]);
-  const totalActivities = sources.reduce((sum, s) => sum + s.activityCount, 0);
-
+export default function Home() {
   return (
-    <div className="flex flex-col gap-8">
-      <div className="space-y-3">
-        <h1 className="max-w-2xl text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-          Search real emission factors for cement, steel, coal, and aluminum
-          production in India
-        </h1>
-        <p className="max-w-xl text-muted-foreground">
-          Pulled live from Climate TRACE, per tonne of product from real
-          facilities. No ecoinvent license, no signup, no paywall.
-        </p>
-        {totalActivities > 0 && (
-          <p className="font-mono text-xs text-muted-foreground">
-            {totalActivities.toLocaleString()} live records tracked right
-            now &middot; see{" "}
-            <a href="/sources" className="underline underline-offset-2 hover:text-primary">
-              exactly where they come from
-            </a>
+    <div className="flex flex-col gap-14">
+      <section className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
+        <div className="space-y-5">
+          <h1 className="display max-w-xl text-4xl leading-[1.05] font-semibold text-balance sm:text-5xl">
+            Every kilogram of carbon, accounted for.
+          </h1>
+          <p className="max-w-md text-lg text-muted-foreground">{BRAND.tagline}</p>
+          <p className="max-w-md text-sm">
+            {EPD_DOCUMENTS} Indian manufacturer EPDs, CEA grid data and Ministry of Steel routes. No login, nothing
+            uploaded.
           </p>
-        )}
-      </div>
-      <SearchView
-        initialQuery={query}
-        initialActivities={initial.activities}
-        initialExactMatch={initial.exactMatch}
-      />
-      <div className="max-w-xl space-y-2 border-t border-border pt-8">
-        <h2 className="text-sm font-medium text-foreground">Before you search</h2>
-        <BulletList
-          items={[
-            "Not ecoinvent. This is free public data, not a licensed LCA database.",
-            "Each activity carries one indicator (CO2e), not a full multi-category LCIA.",
-            "Coverage is India-focused, across major industrial sectors.",
-          ]}
-        />
-      </div>
+        </div>
+        <SteelRoutes />
+      </section>
+
+      <ProjectList />
+      <Templates />
     </div>
   );
 }

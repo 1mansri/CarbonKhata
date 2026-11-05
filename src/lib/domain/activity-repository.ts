@@ -22,6 +22,7 @@ export interface ActivityRepository {
   findById(id: string): Promise<Activity | null>;
   /** All activities, for building an in-memory fuzzy-search index. */
   listAll(): Promise<Activity[]>;
+  /** Replaces a source's activities with `activities` (upsert + prune). */
   upsertFromSource(
     source: DataSourceInfo,
     activities: ActivityData[],

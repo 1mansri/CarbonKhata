@@ -1,0 +1,818 @@
+{
+ "source": "Chaudhary A., Akhtar A. (2023) ACS Environ. Au 3(2):94-104, doi:10.1021/acsenvironau.2c00035, Supporting Information vg2c00035_si_001.xlsx",
+ "note": "Quantities from Table S4, factors (GWP CF per unit) from Table S3, on-site machinery diesel from Table S6. Extracted for validation and cited as facts; the SI file itself is CC BY-NC-ND 4.0 and is not redistributed.",
+ "materials": [
+  {
+   "row": 2,
+   "category": "Bricks",
+   "material": "Common burnt clay F.P.S. (non modular) bricks class designation 7.5",
+   "quantity": 312.71386,
+   "unit": "1000 nos",
+   "cf": 1120,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 350239.5232
+  },
+  {
+   "row": 3,
+   "category": "Portland cement",
+   "material": "Portland Cement",
+   "quantity": 345.63278751200005,
+   "unit": "tonnes",
+   "cf": 910,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 314525.83663592004
+  },
+  {
+   "row": 4,
+   "category": "Steel/iron materials",
+   "material": "Twisted steel / deformed bars",
+   "quantity": 346.4832,
+   "unit": "quintals",
+   "cf": 260,
+   "source": "https://gryphon4.environdec.com/system/data/files/6/11605/epd718%20Vinidex%20PVC%20Pressure%20Pipes%202017.pdf",
+   "gwpTableS4": 90085.63200000001
+  },
+  {
+   "row": 5,
+   "category": "Aluminium",
+   "material": "Aluminium T or L sections",
+   "quantity": 701.7192,
+   "unit": "kg",
+   "cf": 33,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 23156.7336
+  },
+  {
+   "row": 6,
+   "category": "Sand/Coarse sand",
+   "material": "Coarse sand (zone III)",
+   "quantity": 690.029650428,
+   "unit": "m3",
+   "cf": 14.678999999999998,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 10128.945238632608
+  },
+  {
+   "row": 7,
+   "category": "Marbles/tiles/stones",
+   "material": "Ceramic Glazed Tiles Ist quality",
+   "quantity": 899.0274999999999,
+   "unit": "m2",
+   "cf": 11.859,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 10661.567122499999
+  },
+  {
+   "row": 8,
+   "category": "Wood/plywood",
+   "material": "Block board construction flush door with teak wood ply on both faces 35 mm thick",
+   "quantity": 228.38,
+   "unit": "m2",
+   "cf": 0,
+   "source": "https://www.baillargeondoors.com/download/Environmental-Product-Declaration-EPD-November.PDF",
+   "gwpTableS4": 0
+  },
+  {
+   "row": 9,
+   "category": "Wood/plywood",
+   "material": "Block board construction flush door lipping",
+   "quantity": 199.14,
+   "unit": "m2",
+   "cf": 0,
+   "source": "https://www.baillargeondoors.com/download/Environmental-Product-Declaration-EPD-November.PDF",
+   "gwpTableS4": 0
+  },
+  {
+   "row": 10,
+   "category": "Stone aggregate",
+   "material": "Stone Aggregate (Single size) : 20 mm nominal size",
+   "quantity": 285.16153499999996,
+   "unit": "m3",
+   "cf": 14.940000000000001,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 4260.313332899998
+  },
+  {
+   "row": 11,
+   "category": "Aluminium",
+   "material": "Anodising 15 microns on aluminium sections",
+   "quantity": 1231.9445818901534,
+   "unit": "kg",
+   "cf": 10.68,
+   "source": "https://www.oekobaudat.de/OEKOBAU.DAT/datasetdetail/process.xhtml?uuid=c23b2987-776d-4d55-91c7-5f2a0f2c50f1&stock=OBD_2021_I&lang=en",
+   "gwpTableS4": 13157.168134586838
+  },
+  {
+   "row": 12,
+   "category": "Wood/plywood",
+   "material": "Block board construction flush door with commercial ply on both faces 35 mm thick",
+   "quantity": 147.42,
+   "unit": "m2",
+   "cf": 0,
+   "source": "https://www.baillargeondoors.com/download/Environmental-Product-Declaration-EPD-November.PDF",
+   "gwpTableS4": 0
+  },
+  {
+   "row": 13,
+   "category": "Marbles/tiles/stones",
+   "material": "Glazed Ceramic Floor Tile",
+   "quantity": 287.615,
+   "unit": "m2",
+   "cf": 11.859,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 3410.826285
+  },
+  {
+   "row": 14,
+   "category": "Steel/iron materials",
+   "material": "G.I. pipes 40 mm dia",
+   "quantity": 1104.6599999999999,
+   "unit": "kg",
+   "cf": 3.229061553985873,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 3567.0151362260344
+  },
+  {
+   "row": 15,
+   "category": "Steel/iron materials",
+   "material": "Mild steel round bar 6 mm dia",
+   "quantity": 27.025812000000002,
+   "unit": "quintals",
+   "cf": 260,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 7026.71112
+  },
+  {
+   "row": 16,
+   "category": "Stone aggregate",
+   "material": "Stone Aggregate (Single size) : 10 mm nominal size",
+   "quantity": 126.80531,
+   "unit": "m3",
+   "cf": 14.94,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 1894.4713313999998
+  },
+  {
+   "row": 17,
+   "category": "Steel/iron materials",
+   "material": "Mild steel round bar above 12 mm dia",
+   "quantity": 20.042088,
+   "unit": "quintals",
+   "cf": 260,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 5210.94288
+  },
+  {
+   "row": 18,
+   "category": "Steel/iron materials",
+   "material": "G.I. pipes 20 mm dia",
+   "quantity": 626.8649999999999,
+   "unit": "kg",
+   "cf": 3.229061553985873,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 2024.1856710393538
+  },
+  {
+   "row": 19,
+   "category": "Sand/Coarse sand",
+   "material": "Sand zone V (Jamuna)",
+   "quantity": 87.32,
+   "unit": "m3",
+   "cf": 14.678999999999998,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 1281.7702799999997
+  },
+  {
+   "row": 20,
+   "category": "Steel/iron materials",
+   "material": "Plastic encapsuled M.S. foot rest 30x20x15 cm",
+   "quantity": 22,
+   "unit": "each",
+   "cf": 176.62499999999997,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 3885.7499999999995
+  },
+  {
+   "row": 21,
+   "category": "Pipes",
+   "material": "U-PVC pipes (working pressure 4 kg / sqcm) Single socketed pipe 110 mm dia",
+   "quantity": 370,
+   "unit": "m",
+   "cf": 19.90931,
+   "source": "https://gryphon4.environdec.com/system/data/files/6/11605/epd718%20Vinidex%20PVC%20Pressure%20Pipes%202017.pdf",
+   "gwpTableS4": 7366.4447
+  },
+  {
+   "row": 22,
+   "category": "Miscellaneous",
+   "material": "Float glass sheet of nominal thickness 4 mm",
+   "quantity": 109.527,
+   "unit": "m2",
+   "cf": 15,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 1642.905
+  },
+  {
+   "row": 23,
+   "category": "Stone aggregate",
+   "material": "Stone Aggregate (Single size) : 40 mm nominal size",
+   "quantity": 63.839749999999995,
+   "unit": "m3",
+   "cf": 14.94,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 953.7658649999998
+  },
+  {
+   "row": 24,
+   "category": "Miscellaneous",
+   "material": "Plasticizer/super plasticizer",
+   "quantity": 2204.56,
+   "unit": "kg",
+   "cf": 1.88,
+   "source": "https://usa.sika.com/content/dam/dms/us01/m/Plasticizers%20and%20Superplasticizers%20-%20SikaPlast-200-EPD.pdf",
+   "gwpTableS4": 4144.5728
+  },
+  {
+   "row": 25,
+   "category": "Steel/iron materials",
+   "material": "G.I. pipes 15 mm dia",
+   "quantity": 359.38649999999996,
+   "unit": "kg",
+   "cf": 3.229061553985873,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 1160.4811301715436
+  },
+  {
+   "row": 26,
+   "category": "Marbles/tiles/stones",
+   "material": "Ceramic Glazed Tiles Ist quality 300 x 300 in all shades designs except White, Ivory, Grey, Fuem Red Brown etc",
+   "quantity": 74.17925,
+   "unit": "m2",
+   "cf": 11.859,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 879.6917257499999
+  },
+  {
+   "row": 27,
+   "category": "Steel/iron materials",
+   "material": "Flats upto 10 mm in thickness",
+   "quantity": 8.660628,
+   "unit": "quintals",
+   "cf": 250,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 2165.157
+  },
+  {
+   "row": 28,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Steel plates for side and bottom",
+   "quantity": 835.9926907692308,
+   "unit": "kg",
+   "cf": 2.5,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 2089.981726923077
+  },
+  {
+   "row": 29,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Brass hanging type door stopper 150 mm",
+   "quantity": 162,
+   "unit": "each",
+   "cf": 6.6000000000000005,
+   "source": "https://circularecology.com/embodied-carbon-footprint-database.html",
+   "gwpTableS4": 1069.2
+  },
+  {
+   "row": 30,
+   "category": "Pipes",
+   "material": "Stoneware pipes grade A (60 cm long) 150 mm dia",
+   "quantity": 430.755,
+   "unit": "each",
+   "cf": 15.768,
+   "source": "https://www.oekobaudat.de/OEKOBAU.DAT/datasetdetail/process.xhtml?uuid=335c3c94-a981-4dbd-af2f-811e918f1b94&version=20.19.120&stock=OBD_2020_II",
+   "gwpTableS4": 6792.14484
+  },
+  {
+   "row": 31,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Plates",
+   "quantity": 674.7972444444445,
+   "unit": "kg",
+   "cf": 2.5,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 1686.9931111111111
+  },
+  {
+   "row": 32,
+   "category": "Pipes",
+   "material": "U-PVC pipes (working pressure 4 kg / sqcm) Single socketed pipe 32 mm dia",
+   "quantity": 175,
+   "unit": "m",
+   "cf": 19.90931,
+   "source": "https://gryphon4.environdec.com/system/data/files/6/11605/epd718%20Vinidex%20PVC%20Pressure%20Pipes%202017.pdf",
+   "gwpTableS4": 3484.1292500000004
+  },
+  {
+   "row": 33,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Stainless steel butt hinges",
+   "quantity": 62.285454545454535,
+   "unit": "10 Nos",
+   "cf": 14.5,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 903.1390909090908
+  },
+  {
+   "row": 34,
+   "category": "Steel/iron materials",
+   "material": "G.I. pipes 25 mm dia",
+   "quantity": 239.08499999999998,
+   "unit": "kg",
+   "cf": 3.229061553985873,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 772.0201816347123
+  },
+  {
+   "row": 35,
+   "category": "Paint/Primer/Plaster of paris",
+   "material": "Acrylic Exterior Primer",
+   "quantity": 352.3278,
+   "unit": "kg",
+   "cf": 2.189473684210526,
+   "source": "https://portal.environdec.com/api/api/v1/EPDLibrary/Files/574f7301-400f-499d-a8b6-4378f7f79c54/Data",
+   "gwpTableS4": 771.4124463157895
+  },
+  {
+   "row": 36,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Bright finished or black enamelled mild steel butt hinges",
+   "quantity": 58.416,
+   "unit": "10 Nos",
+   "cf": 14.5,
+   "source": "https://us.allegion.com/content/dam/allegion-us-2/web-documents-2/Report/Ives_Architectural_Hinges_Environmental_Product_Declaration_111296.pdf",
+   "gwpTableS4": 847.0319999999999
+  },
+  {
+   "row": 37,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Anodised Aluminium butt hinges",
+   "quantity": 12.967837704106879,
+   "unit": "10 Nos",
+   "cf": 40.0902,
+   "source": "https://www.allegion.co.uk/content/dam/allegionuk/Downloads/EPD/AL-0000423952%20-%20EPD%20Briton%20Hinges.pdf",
+   "gwpTableS4": 519.8832071251857
+  },
+  {
+   "row": 38,
+   "category": "Steel/iron materials",
+   "material": "Pressed steel door frames (mild steel sheet 1.60mm) Profile \"B\" frame",
+   "quantity": 486.8,
+   "unit": "kg",
+   "cf": 2.5,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 1217
+  },
+  {
+   "row": 39,
+   "category": "Paint/Primer/Plaster of paris",
+   "material": "Plaster of Paris",
+   "quantity": 5366.359999999999,
+   "unit": "kg",
+   "cf": 0.13,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 697.6267999999999
+  },
+  {
+   "row": 40,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Stainless steel butt hinges (heavy weight) 100x60x2.5 mm IS : 12817 marked",
+   "quantity": 40.20545454545454,
+   "unit": "10 Nos",
+   "cf": 14.5,
+   "source": "https://us.allegion.com/content/dam/allegion-us-2/web-documents-2/Report/Ives_Architectural_Hinges_Environmental_Product_Declaration_111296.pdf",
+   "gwpTableS4": 582.9790909090909
+  },
+  {
+   "row": 41,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Hydraulic door closer bottle type M.S. body with necessary accessories and screws complete",
+   "quantity": 24,
+   "unit": "each",
+   "cf": 22.1559,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 531.7416
+  },
+  {
+   "row": 42,
+   "category": "Miscellaneous",
+   "material": "C.I. cover and frame 300x300 mm inside",
+   "quantity": 10,
+   "unit": "each",
+   "cf": 40.363269424823415,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 403.63269424823415
+  },
+  {
+   "row": 43,
+   "category": "Miscellaneous",
+   "material": "S.W. gully trap P type 150x100 mm",
+   "quantity": 10,
+   "unit": "each",
+   "cf": 40.363269424823415,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 403.63269424823415
+  },
+  {
+   "row": 44,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Structurals such as tees,angles channels and R.S. joists",
+   "quantity": 2.9208,
+   "unit": "quintal",
+   "cf": 250,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 730.2
+  },
+  {
+   "row": 45,
+   "category": "Wood/plywood",
+   "material": "Second class kail wood in scantling",
+   "quantity": 215.69218750000002,
+   "unit": "10 cudm",
+   "cf": 0,
+   "source": "https://www.oekobaudat.de/OEKOBAU.DAT/datasetdetail/process.xhtml?lang=en&uuid=e9be7506-62ce-45b8-853f-c45c3f82401f",
+   "gwpTableS4": 0
+  },
+  {
+   "row": 46,
+   "category": "Miscellaneous",
+   "material": "Chlorpyriphos / Lindane E.C 20% with 1% concentration",
+   "quantity": 221.42887499999998,
+   "unit": "litres",
+   "cf": 40.5927,
+   "source": "https://ecoinvent.org/the-ecoinvent-database/impact-assessment/",
+   "gwpTableS4": 8988.3958942125
+  },
+  {
+   "row": 47,
+   "category": "Paint/Primer/Plaster of paris",
+   "material": "Premium Acrylic exterior paint",
+   "quantity": 229.01306999999997,
+   "unit": "litres",
+   "cf": 1.49,
+   "source": "https://portal.environdec.com/api/api/v1/EPDLibrary/Files/574f7301-400f-499d-a8b6-4378f7f79c54/Data",
+   "gwpTableS4": 341.22947429999994
+  },
+  {
+   "row": 48,
+   "category": "Marbles/tiles/stones",
+   "material": "Kota stone slab 20 mm to 25 mm thick",
+   "quantity": 130.8125,
+   "unit": "m2",
+   "cf": 2.912,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 380.92599999999993
+  },
+  {
+   "row": 49,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Anodised Aluminium tower bolt (barrel type)300x10 mm",
+   "quantity": 14.6,
+   "unit": "10 Nos",
+   "cf": 32.04,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 467.784
+  },
+  {
+   "row": 50,
+   "category": "Miscellaneous",
+   "material": "Neoprene/EPDM rubber gasket",
+   "quantity": 597.42,
+   "unit": "m",
+   "cf": 0.8953,
+   "source": "https://www.oekobaudat.de/OEKOBAU.DAT/datasetdetail/process.xhtml?uuid=208395ce-85db-4ec3-ab24-8e5920f58077&version=20.19.120&stock=OBD_2020_II",
+   "gwpTableS4": 534.8701259999999
+  },
+  {
+   "row": 51,
+   "category": "Pipes",
+   "material": "U-PVC pipes (working pressure 4 kg / sqcm) Single socketed pipe 75 mm dia",
+   "quantity": 32,
+   "unit": "m",
+   "cf": 19.90931,
+   "source": "https://gryphon4.environdec.com/system/data/files/6/11605/epd718%20Vinidex%20PVC%20Pressure%20Pipes%202017.pdf",
+   "gwpTableS4": 637.09792
+  },
+  {
+   "row": 52,
+   "category": "Wood/plywood",
+   "material": "Second class kail wood in planks",
+   "quantity": 79.3190625,
+   "unit": "10 cudm",
+   "cf": 0,
+   "source": "https://www.oekobaudat.de/OEKOBAU.DAT/datasetdetail/process.xhtml?lang=en&uuid=e9be7506-62ce-45b8-853f-c45c3f82401f",
+   "gwpTableS4": 0
+  },
+  {
+   "row": 53,
+   "category": "Paint/Primer/Plaster of paris",
+   "material": "Premium plastic acrylic emulsion of interior grade, having VOC content less than 50 grams/ litre",
+   "quantity": 282.31719999999996,
+   "unit": "litres",
+   "cf": 0.706,
+   "source": "https://portal.environdec.com/api/api/v1/EPDLibrary/Files/574f7301-400f-499d-a8b6-4378f7f79c54/Data",
+   "gwpTableS4": 199.31594319999996
+  },
+  {
+   "row": 54,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Brass handles 100 mm with plate 150x32 mm",
+   "quantity": 95,
+   "unit": "each",
+   "cf": 1.386,
+   "source": "https://circularecology.com/embodied-carbon-footprint-database.html",
+   "gwpTableS4": 131.67
+  },
+  {
+   "row": 55,
+   "category": "Steel/iron materials",
+   "material": "Mild steel tubes hot finished welded type",
+   "quantity": 61.425000000000004,
+   "unit": "kg",
+   "cf": 2.5,
+   "source": "https://www.tatasteelconstruction.com/static_files/Tata%20Steel/content/products/Structural%20Hollow%20Sections/Celsius%C2%AE%20420/Downloads/updated%20downloads/Tata%20Steel%20EPD%20structural%20hollow%20sections.pdf",
+   "gwpTableS4": 153.5625
+  },
+  {
+   "row": 56,
+   "category": "Paint/Primer/Plaster of paris",
+   "material": "Water thinnable cement primer for interior wall surface, having VOC content less than 50 gms/lit",
+   "quantity": 163.324,
+   "unit": "litres",
+   "cf": 0.716,
+   "source": "https://portal.environdec.com/api/api/v1/EPDLibrary/Files/574f7301-400f-499d-a8b6-4378f7f79c54/Data",
+   "gwpTableS4": 116.93998400000001
+  },
+  {
+   "row": 57,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Column clamp 450x1070 m",
+   "quantity": 13.923882666666668,
+   "unit": "each",
+   "cf": 11.565000000000001,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 161.02970304000002
+  },
+  {
+   "row": 58,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Beam clamp 300-380 mm",
+   "quantity": 13.808506282051283,
+   "unit": "each",
+   "cf": 11.565000000000001,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 159.69537515192312
+  },
+  {
+   "row": 59,
+   "category": "Miscellaneous",
+   "material": "Circular C.I. Box for ceiling fan",
+   "quantity": 40,
+   "unit": "each",
+   "cf": 1.9374369323915237,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 77.49747729566094
+  },
+  {
+   "row": 60,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Stainless steel screws 40 mm",
+   "quantity": 81.99272727272725,
+   "unit": "100 Nos",
+   "cf": 1.55914,
+   "source": "https://www.oekobaudat.de/OEKOBAU.DAT/datasetdetail/process.xhtml?uuid=41ecf1e2-3edd-41ab-8616-68a856c815a5&version=20.19.120&stock=OBD_2020_II",
+   "gwpTableS4": 127.83814079999999
+  },
+  {
+   "row": 61,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Brass screws 25 mm",
+   "quantity": 41.24,
+   "unit": "100 Nos",
+   "cf": 1.3998599999999999,
+   "source": "https://circularecology.com/embodied-carbon-footprint-database.html",
+   "gwpTableS4": 57.7302264
+  },
+  {
+   "row": 62,
+   "category": "Paint/Primer/Plaster of paris",
+   "material": "Acrylic distemper 1st quality , having VOC content less than 50 grams/ litre",
+   "quantity": 349.97999999999996,
+   "unit": "kg",
+   "cf": 0.5353846153846153,
+   "source": "https://portal.environdec.com/api/api/v1/EPDLibrary/Files/574f7301-400f-499d-a8b6-4378f7f79c54/Data",
+   "gwpTableS4": 187.37390769230765
+  },
+  {
+   "row": 63,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Anodised Aluminium tower bolt (barrel type)150x10 mm",
+   "quantity": 5.6,
+   "unit": "10 Nos",
+   "cf": 16.02,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 89.712
+  },
+  {
+   "row": 64,
+   "category": "Steel/iron materials",
+   "material": "Mild steel round bar 12 mm dia",
+   "quantity": 0.32,
+   "unit": "quintals",
+   "cf": 260,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 83.2
+  },
+  {
+   "row": 65,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Chromium plated Brass screws 20 mm",
+   "quantity": 29.82602671944582,
+   "unit": "100 Nos",
+   "cf": 1.125432,
+   "source": "https://circularecology.com/embodied-carbon-footprint-database.html",
+   "gwpTableS4": 33.56716490291935
+  },
+  {
+   "row": 66,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Chromium plated Brass screws 30 mm",
+   "quantity": 16.16,
+   "unit": "100 Nos",
+   "cf": 1.3998599999999999,
+   "source": "https://circularecology.com/embodied-carbon-footprint-database.html",
+   "gwpTableS4": 22.621737599999996
+  },
+  {
+   "row": 67,
+   "category": "Paint/Primer/Plaster of paris",
+   "material": "Ready mixed pink or grey primer on wood work",
+   "quantity": 5.895,
+   "unit": "litres",
+   "cf": 2.91,
+   "source": "https://portal.environdec.com/api/api/v1/EPDLibrary/Files/574f7301-400f-499d-a8b6-4378f7f79c54/Data",
+   "gwpTableS4": 17.15445
+  },
+  {
+   "row": 68,
+   "category": "Paint/Primer/Plaster of paris",
+   "material": "Black colour dark shade pigment",
+   "quantity": 51.1875,
+   "unit": "kg",
+   "cf": 0.526865671641791,
+   "source": "https://portal.environdec.com/api/api/v1/EPDLibrary/Files/574f7301-400f-499d-a8b6-4378f7f79c54/Data",
+   "gwpTableS4": 26.968936567164178
+  },
+  {
+   "row": 69,
+   "category": "Accessories water supply",
+   "material": "Brass full way valve with C.I. wheel (screwed end) 40 mm dia",
+   "quantity": 10,
+   "unit": "each",
+   "cf": 1.8017999999999998,
+   "source": "https://circularecology.com/embodied-carbon-footprint-database.html",
+   "gwpTableS4": 18.017999999999997
+  },
+  {
+   "row": 70,
+   "category": "Miscellaneous",
+   "material": "C.I. grating 150x150 mm",
+   "quantity": 10,
+   "unit": "each",
+   "cf": 1.4207870837537842,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 14.207870837537842
+  },
+  {
+   "row": 71,
+   "category": "Pipes",
+   "material": "U-PVC pipes (working pressure 4 kg / sqcm.) Rubber (Seal) Ring 110 mm dia",
+   "quantity": 120,
+   "unit": "each",
+   "cf": 0.1188,
+   "source": "https://gryphon4.environdec.com/system/data/files/6/11605/epd718%20Vinidex%20PVC%20Pressure%20Pipes%202017.pdf",
+   "gwpTableS4": 14.256
+  },
+  {
+   "row": 72,
+   "category": "Miscellaneous",
+   "material": "Corner angle 45x45x5 m 2.50 m long",
+   "quantity": 11.13386666666667,
+   "unit": "each",
+   "cf": 1.401696,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 15.606296371200004
+  },
+  {
+   "row": 73,
+   "category": "Accessories water supply",
+   "material": "Brass full way valve with C.I. wheel (screwed end) 25 mm dia",
+   "quantity": 10,
+   "unit": "each",
+   "cf": 0.9701999999999998,
+   "source": "https://circularecology.com/embodied-carbon-footprint-database.html",
+   "gwpTableS4": 9.701999999999998
+  },
+  {
+   "row": 74,
+   "category": "Sand/Coarse sand",
+   "material": "Fine sand (zone IV)",
+   "quantity": 0.141,
+   "unit": "m3",
+   "cf": 14.678999999999998,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 2.0697389999999998
+  },
+  {
+   "row": 75,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Double clip ( bridge clip)",
+   "quantity": 5.452592592592592,
+   "unit": "each",
+   "cf": 0.8,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 4.362074074074074
+  },
+  {
+   "row": 76,
+   "category": "Miscellaneous",
+   "material": "Corner angle 45x45x5 mm 1.50 m long",
+   "quantity": 1.363148148148148,
+   "unit": "each",
+   "cf": 1.401696,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 1.9107193066666666
+  },
+  {
+   "row": 77,
+   "category": "Hinges/screws/bolt/clamps/stoppers/handles/clips/angles",
+   "material": "Single clip",
+   "quantity": 2.726296296296296,
+   "unit": "each",
+   "cf": 0.8,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 2.181037037037037
+  },
+  {
+   "row": 78,
+   "category": "Paint/Primer/Plaster of paris",
+   "material": "Priming coat 40mm dia.Tube",
+   "quantity": 0.24570000000000003,
+   "unit": "litres",
+   "cf": 2.91,
+   "source": "https://portal.environdec.com/api/api/v1/EPDLibrary/Files/574f7301-400f-499d-a8b6-4378f7f79c54/Data",
+   "gwpTableS4": 0.714987
+  },
+  {
+   "row": 79,
+   "category": "Soil",
+   "material": "Soil",
+   "quantity": 45,
+   "unit": "m3",
+   "cf": 0,
+   "source": "https://edgebuildings.com/wp-content/uploads/2017/12/IFC-India-Construction-Materials-Database-Methodology-Report.pdf",
+   "gwpTableS4": 0
+  }
+ ],
+ "onsiteDieselL": [
+  {
+   "row": 3,
+   "machinery": "Hydraulic Excavator (3D) with driver and fuel",
+   "dieselL": 762.9625575,
+   "gwp": 2491.0727502375003
+  },
+  {
+   "row": 4,
+   "machinery": "Loader",
+   "dieselL": 860.77827,
+   "gwp": 2810.4410515500003
+  },
+  {
+   "row": 5,
+   "machinery": "Concrete Mixer 0.25 to 0.40 cum with hooper",
+   "dieselL": 416.92862745098046,
+   "gwp": 1361.271968627451
+  },
+  {
+   "row": 6,
+   "machinery": "Mobile crane",
+   "dieselL": 1041.5547169811323,
+   "gwp": 3400.676150943397
+  },
+  {
+   "row": 7,
+   "machinery": "Mobile crane",
+   "dieselL": 615.9682433561758,
+   "gwp": 2011.1363145579141
+  }
+ ]
+}

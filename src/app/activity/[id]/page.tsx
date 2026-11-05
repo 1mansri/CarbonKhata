@@ -22,11 +22,11 @@ export default async function ActivityDetailPage({
   return (
     <div className="flex flex-col gap-6">
       <Link
-        href="/"
+        href="/library"
         className="flex w-fit items-center gap-1.5 text-sm text-muted-foreground hover:text-primary"
       >
         <ArrowLeft className="size-4" />
-        Back to search
+        Back to library
       </Link>
 
       <div className="space-y-3">

@@ -1,105 +1,102 @@
-# LCA Data Portal
+# CarbonKhata
 
-A BTP (thesis) project: search an activity, get a real per-unit emission
-factor, and clean your own datasets — built entirely on live, self-serve
-public APIs (no manually-downloaded files, no ecoinvent access; see
-[Data sources](#data-sources) below).
+An open embodied-carbon calculator for Indian construction research (BTP project).
+*Khata* is the ledger Indian shops have kept by hand for generations: every
+entry written down, every balance traceable. This tool does that for carbon.
 
-## Stack
+It replaces the Excel sheet a research scholar builds by hand: enter a bill of
+materials, get cradle-to-gate (and optionally cradle-to-grave) GWP following
+ISO 14040/14044 and the EN 15804+A2 module structure. Every number comes from a
+named Indian source with its table or page, and every result shows its working.
 
-- pnpm, Next.js (App Router) + TypeScript, Tailwind CSS
-- shadcn/ui (Base UI) for components, TanStack Query for client data fetching
-- Prisma ORM 7 (driver-adapter based) + SQLite for local dev
+## What it does
+
+- **Ledger.** Add materials from a curated India library (or your own cited
+  factor), with transport (A4), site wastage and energy (A5), and end of life
+  (C1–C4). A running balance column totals the ledger line by line.
+- **Results.** Totals by module, hotspots, a data-provenance split ("how much of
+  this number rests on Indian data?"), and Monte Carlo uncertainty from each
+  factor's published range (5,000 runs, seed 42, reproducible).
+- **Compare.** Alternatives on one scale, e.g. OPC vs PPC vs slag-rich concrete.
+- **Report and export.** An ISO 14044-structured report (print to PDF),
+  an Excel workbook with live formulas, BibTeX references and a project file.
+- **BoQ import.** Drop a CPWD-style bill of quantities (cum, sqm, MT, qtl,
+  bags, nos); rows are matched to library materials for review.
+- **No login.** Projects live in the browser and move as project files.
+
+## Data
+
+Only open or publicly available sources; no ecoinvent, GaBi, ICE or paid APIs.
+
+| Source | What | Notes |
+|---|---|---|
+| Indian manufacturer EPDs (International EPD System) | Cement (OPC/PPC/PSC/PCC), ready-mix concrete, TMT rebar and sections, GGBS, fly ash, glass, plasterboard, aluminium, paint | Cited with registration number and validity date |
+| IFC (2017) India Construction Materials Database | Bricks by kiln type, blocks, aggregates, sand, tiles, generic cement and steel | © IFC, values cited with attribution |
+| Ministry of Steel (2024) roadmap | Crude steel CO₂ intensity by route, with ranges | Table 1.7 |
+| CEA CO₂ Baseline Database v22.0 | India grid factor (FY2025-26: 0.6751 kg CO₂/kWh) | CEA asks for permission by email before public reuse |
+| Maithel et al. (2012) | Brick kiln stack CO₂ (firing stage only) | |
+| India GHG Program (2015) | Indian truck (per vehicle-km) and rail freight factors | Draft for consultation, all rights reserved |
+| UK DESNZ (2025) | Freight, diesel, water and end-of-life proxies | Open Government Licence v3.0 |
+| Climate TRACE (live) | Indian cement, steel, aluminium and power plants | CC BY 4.0; live "Library" tab |
+| Ember (live) | India grid carbon intensity and generation mix | Needs a free `EMBER_API_KEY` |
+
+The library is generated from a verified extraction in which every value was
+read from its source PDF or spreadsheet; see `src/data/lca/`.
+
+## Stack and layout
+
+Next.js (App Router) + TypeScript, Tailwind CSS, Base UI, Prisma 7 + SQLite
+(live data only), Fuse.js, SheetJS.
+
+- `src/lib/lca/` — the engine: pure TypeScript, no React. `calculate.ts`
+  (linear, with a working string per module), `units.ts`, `uncertainty.ts`,
+  `provenance.ts`, `export.ts`, `boq.ts`.
+- `src/data/lca/` — the factor library and bibliography, versioned in git.
+- `src/components/` — `project/` (workspace), `charts/` (hand-built SVG/HTML
+  charts), `home/`, `library/`, `import/`.
+- `src/lib/sources/`, `src/lib/repositories/` — live Climate TRACE / Ember sync.
 
 ## Getting started
 
 ```bash
 pnpm install
 cp .env.example .env
-pnpm prisma db seed    # syncs live Climate TRACE + Ember data into dev.db
+pnpm prisma db seed    # live Climate TRACE + Ember data for the Library tab
 pnpm dev
 ```
 
-Open http://localhost:3000. Climate TRACE needs no key; Ember needs a
-free `EMBER_API_KEY` (see [Data sources](#data-sources)) or its sync is
-skipped automatically.
+## Validation
 
-## Architecture
+The engine reproduces a published Indian building study, Chaudhary & Akhtar
+(2023), *ACS Environmental Au* 3(2):94–104: 78 materials from a CPWD bill of
+quantities, rebuilt with the paper's own factors and units (per 1000 bricks,
+quintals, packs of 10/100, litres, metres).
 
-The codebase is layered so each piece has one reason to change, and new
-data sources or cleaning rules can be added without touching existing
-code:
-
-- **`src/lib/domain/`** — plain TypeScript interfaces only:
-  `DataSourceAdapter` (`fetch()`/`normalize()`), `ActivityRepository`,
-  `CleaningRule`. No implementation logic lives here.
-- **`src/lib/sources/`** — one adapter per data source implementing
-  `DataSourceAdapter` (`climatetrace.ts`, `ember.ts`). Adding a new
-  source means adding a new adapter here — nothing else changes.
-- **`src/lib/repositories/`** — `PrismaActivityRepository` implements
-  `ActivityRepository`, wrapping all Prisma calls. Services depend on
-  the interface, not Prisma directly, so swapping databases or writing
-  tests with a fake repository doesn't touch service code.
-- **`src/lib/services/`** — `SearchService`, `ExportService`,
-  `SyncService` hold business logic. Each has one job.
-- **`src/lib/cleaning/`** — the upload/clean pipeline: cleaning
-  behaviors are small `CleaningRule` strategy classes
-  (`TrimWhitespaceRule`, `NormalizeUnitsRule`, `DedupeExactRowsRule`,
-  `FlagMissingValuesRule`) composed by `CleaningPipeline`. Runs entirely
-  client-side (no file upload to the server).
-- **`src/app/api/`** — route handlers stay thin: parse request → call a
-  service → return response.
-
-### Data model
-
-`DataSource` → `Activity` → `ImpactIndicator`, mirroring how
-ecoinvent/openLCA structure activities and their exchanges/indicators —
-so a real ecoinvent export could be mapped into this schema later
-without a schema change.
-
-## Data sources
-
-**Ecoinvent is intentionally not included.** It requires a paid
-subscription for both its API and raw data exports, and this project
-doesn't have institutional access — its API can't be called without one,
-so there's no self-serve way in. If that changes, add an
-`EcoinventAdapter` implementing `DataSourceAdapter` in
-`src/lib/sources/` — nothing else in the app needs to change.
-
-| Source | Fetch mode | What it provides |
+| Stage | Published (kg CO₂e) | CarbonKhata |
 |---|---|---|
-| [Climate TRACE](https://climatetrace.org) | Live API, **no key needed**, refreshable via `/sources` or `POST /api/sync/climatetrace` | Asset-level global emissions inventory (CC BY 4.0) — real named facilities (cement plants, steel mills, aluminum smelters, refineries, power stations, ...) across nearly every industrial/agriculture/land-use sector in India, each with a real per-unit emission factor, plus a sector-level aggregate per (sector, asset type) |
-| [Ember](https://ember-energy.org/data/api/) | Live API, free self-serve key, refreshable via `/sources` or `POST /api/sync/ember` | India's grid electricity carbon intensity (gCO2/kWh) and generation mix by fuel type for the latest year — the background electricity factor almost every product LCA needs somewhere in its inventory |
+| A1–A3 material production | 899,412.37 | 899,412.37 (every line matches Table S4) |
+| A5 on-site construction | 12,075.01 | 12,074.60 (0.41 kg of welding is entered per cm, which the tool can't express) |
 
-This is the only source kept in the product. Two others were built and
-then deliberately removed once it became clear they weren't the right
-fit — kept here as a record, not as a suggestion to re-add them:
+A4 transport (24.6 t) is not part of the check: the paper rounds truck trips per
+material category, while the tool allocates trips in proportion to mass. The
+case also ships as a worked example on the home page. See
+`src/data/lca/validation.ts`.
 
-- **CPCB air quality / CEPI (data.gov.in)** — real, live, free, and
-  correctly labeled as `regulatory-monitoring` rather than LCA data. But
-  ambient monitoring readings and regional pollution scores aren't
-  per-unit-of-product data, so they didn't serve this project's actual
-  goal (searching for an activity's impact) and just diluted search
-  results. Removed.
-- **Climatiq** — an emission-factor API closest in spirit to ecoinvent,
-  rejected because real API access requires contacting sales, not a
-  self-serve key.
-- **DEFRA/CEA** — authoritative but published as an annual downloadable
-  file release, not an API.
+## Tests
 
-data.gov.in has no catalog/search API to discover which of its ~100k+
-datasets have live API access (most are download-only unless the
-publishing ministry explicitly enabled one) — each has to be checked
-individually on the site itself.
+```bash
+pnpm test
+```
 
-Ember's real endpoint and OpenAPI spec (`api.ember-energy.org/v1/openapi.json`)
-were verified directly; its marketing/signup page is behind bot
-protection that blocks automated fetches, so getting the key is a manual
-step (same as data.gov.in).
+Covers the engine, unit conversion, uncertainty, the BoQ parser (including
+CPWD-style headers and units), the integrity of every library factor (source
+exists, locator present, ranges bracket the value), the Excel export (every
+formula recomputes to the engine's value) and the validation case above.
 
-## Scripts
+## Research
 
-- `pnpm dev` / `pnpm build` / `pnpm start`
-- `pnpm lint`
-- `pnpm prisma db seed` — sync all configured sources into the dev database
-- `pnpm prisma studio` — browse the local SQLite database
+`docs/research/literature-review.md` reviews 20 Indian embodied-carbon studies,
+the pain points of current practice (data gaps, 6× spread in brick factors,
+irreproducible papers, no uncertainty reporting), Indian policy for 2023–2026
+(CCTS, Green Steel Taxonomy, ECSBC, CBAM) and the validation candidates.
+`data/extracted/` holds the verified factor extractions behind the library.

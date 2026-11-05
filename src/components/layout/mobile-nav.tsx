@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MenuIcon, Leaf } from "lucide-react";
+import { MenuIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/sheet";
 import { NavLink } from "@/components/layout/nav-link";
 import { navLinks } from "@/components/layout/nav-links";
+import { LogoMark, Wordmark } from "@/components/layout/logo";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
@@ -29,8 +30,8 @@ export function MobileNav() {
       <SheetContent side="right">
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
-            <Leaf className="size-4 text-primary" />
-            LCA Data Portal
+            <LogoMark className="size-5 text-primary" />
+            <Wordmark />
           </SheetTitle>
         </SheetHeader>
         <nav className="flex flex-col gap-4 px-4">

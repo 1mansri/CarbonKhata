@@ -1,45 +1,35 @@
 import Link from "next/link";
-import { Leaf } from "lucide-react";
 import { NavLink } from "@/components/layout/nav-link";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { navLinks } from "@/components/layout/nav-links";
+import { LogoMark, Wordmark } from "@/components/layout/logo";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-full flex-col">
-      <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/75">
-        <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link
-            href="/"
-            className="flex items-center gap-2 text-base font-semibold tracking-tight text-foreground"
-          >
-            <Leaf className="size-5 text-primary" />
-            LCA Data Portal
+      <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur supports-backdrop-filter:bg-background/75 print:hidden">
+        <div className="mx-auto flex h-14 w-full max-w-7xl items-center gap-8 px-4 sm:px-6 lg:px-8">
+          <Link href="/" className="flex items-center gap-2.5 text-foreground">
+            <LogoMark className="size-6 text-primary" />
+            <Wordmark />
           </Link>
-          <nav className="hidden items-center gap-8 md:flex">
+          <nav className="hidden items-center gap-6 md:flex">
             {navLinks.map((link) => (
               <NavLink key={link.href} href={link.href}>
                 {link.label}
               </NavLink>
             ))}
           </nav>
-          <MobileNav />
+          <div className="ml-auto flex items-center gap-1">
+            <ThemeToggle />
+            <MobileNav />
+          </div>
         </div>
       </header>
-      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-8 sm:px-6 lg:px-8">
+      <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 py-8 sm:px-6 lg:px-8 print:max-w-none print:p-0">
         {children}
       </main>
-      <footer className="border-t border-border">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-1 px-4 py-6 text-xs text-muted-foreground sm:px-6 lg:px-8">
-          <p>
-            LCA Data Portal, a BTP project. Live data from Climate TRACE.{" "}
-            <Link href="/sources" className="underline underline-offset-2 hover:text-primary">
-              See exact sources
-            </Link>
-            .
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }

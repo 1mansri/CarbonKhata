@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 
 type KindFilter = DataKind | "all";
 
-const SEARCH_HINTS = ["cement", "steel", "coal", "aluminum", "grid electricity"];
+const SEARCH_HINTS = ["cement", "steel", "aluminum", "grid electricity"];
 
 interface SearchResponse {
   activities: Activity[];
