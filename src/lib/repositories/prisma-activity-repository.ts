@@ -54,9 +54,10 @@ export class PrismaActivityRepository implements ActivityRepository {
       ...(query
         ? {
             OR: [
-              { name: { contains: query } },
-              { category: { contains: query } },
-              { sector: { contains: query } },
+              // Postgres `contains` is case-sensitive (SQLite's wasn't).
+              { name: { contains: query, mode: "insensitive" } },
+              { category: { contains: query, mode: "insensitive" } },
+              { sector: { contains: query, mode: "insensitive" } },
             ],
           }
         : {}),

@@ -1,15 +1,18 @@
 import { PrismaClient } from "@/generated/prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaPg } from "@prisma/adapter-pg";
 
 declare global {
   var prismaClient: PrismaClient | undefined;
 }
 
 function createPrismaClient() {
-  const adapter = new PrismaBetterSqlite3({
-    url: process.env.DATABASE_URL ?? "file:./dev.db",
-  });
-  return new PrismaClient({ adapter });
+  const connectionString = process.env.DATABASE_URL;
+  if (!connectionString) {
+    throw new Error(
+      "DATABASE_URL is not set. Use your Neon pooled connection string (see .env.example).",
+    );
+  }
+  return new PrismaClient({ adapter: new PrismaPg({ connectionString }) });
 }
 
 // Next.js dev-mode hot reload creates a new module instance per edit, which

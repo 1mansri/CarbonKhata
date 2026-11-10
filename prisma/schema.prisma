@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
 
 // A place data was fetched/imported from (data.gov.in/CPCB, DEFRA, CEA, or
