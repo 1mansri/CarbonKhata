@@ -1,4 +1,8 @@
+import Form from "next/form";
+import { Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { SteelRoutes } from "@/components/home/steel-routes";
+import { DRAFT_MAX_CHARS } from "@/lib/lca/ai-draft";
 import { ProjectList } from "@/components/home/project-list";
 import { Templates } from "@/components/home/templates";
 import { BRAND } from "@/lib/brand";
@@ -22,6 +26,21 @@ export default function Home() {
             {EPD_DOCUMENTS} Indian manufacturer EPDs, CEA grid data and Ministry of Steel routes. No login, nothing
             uploaded.
           </p>
+          {/* Plain GET form: /import?describe=… drafts the inventory on arrival. */}
+          <Form action="/import" className="flex max-w-md gap-2">
+            <input
+              name="describe"
+              required
+              maxLength={DRAFT_MAX_CHARS}
+              aria-label="Describe what you're building"
+              placeholder="Describe it: 230 mm brick wall, 10 m²"
+              className="h-10 w-full min-w-0 rounded-lg border border-input bg-card px-3 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            />
+            <Button type="submit" className="h-10 shrink-0">
+              <Sparkles />
+              Draft
+            </Button>
+          </Form>
         </div>
         <SteelRoutes />
       </section>

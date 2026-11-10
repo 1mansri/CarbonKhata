@@ -89,7 +89,8 @@ export function Ledger({
                       <NumberInput
                         aria-label={`Quantity of ${r.label}`}
                         value={item.quantity}
-                        onChange={(q) => q != null && setItem(item.id, (i) => ({ ...i, quantity: q }))}
+                        // An edited quantity is the user's own, no longer an AI estimate.
+                        onChange={(q) => q != null && setItem(item.id, (i) => ({ ...i, quantity: q, aiBasis: undefined }))}
                       />
                       <NativeSelect
                         aria-label="Unit"
@@ -154,6 +155,11 @@ function RowChips({ item, result }: { item: InventoryItem; result: ItemResult })
   return (
     <span className="mt-0.5 flex flex-wrap items-center gap-1.5">
       <QualityBadge quality={item.material.quality} />
+      {item.aiBasis !== undefined && (
+        <span className="text-xs font-medium text-warning" title={item.aiBasis || "Quantity drafted by AI"}>
+          AI quantity
+        </span>
+      )}
       {chips.map((c) => (
         <span key={c} className="text-xs text-muted-foreground">
           {c}

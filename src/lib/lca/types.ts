@@ -151,6 +151,11 @@ export interface InventoryItem {
   /** Share of the installed quantity wasted on site, in %. */
   wastagePct?: number;
   endOfLife?: EndOfLifeChoice;
+  /**
+   * Set while the quantity is an AI estimate: the model's stated basis.
+   * Cleared as soon as the user edits the quantity themselves.
+   */
+  aiBasis?: string;
 }
 
 export interface SiteEnergyItem {
