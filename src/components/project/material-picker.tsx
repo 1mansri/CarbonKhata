@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Fuse from "fuse.js";
-import { Plus, Search, X } from "lucide-react";
+import { ArrowLeft, Plus, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { NativeSelect } from "@/components/ui/native-select";
@@ -57,7 +57,8 @@ export function MaterialPicker({
   );
 
   return (
-    <div className="rounded-lg border border-border bg-card">
+    // Wide: list and details side by side. Narrow: list, then details in its place.
+    <div className="enter-drop @container rounded-lg border border-border bg-card">
       <div className="flex items-center gap-1 border-b border-border px-2 py-1.5">
         {(["library", "custom"] as const).map((m) => (
           <button
@@ -65,7 +66,7 @@ export function MaterialPicker({
             type="button"
             onClick={() => setMode(m)}
             className={cn(
-              "rounded-md px-2.5 py-1 text-sm transition-colors duration-150",
+              "rounded-md px-2.5 py-1.5 text-sm transition-colors duration-150",
               mode === m ? "bg-secondary font-medium" : "text-muted-foreground hover:text-foreground",
             )}
           >
@@ -80,40 +81,40 @@ export function MaterialPicker({
       {mode === "custom" ? (
         <CustomFactorForm onAdd={onAdd} />
       ) : (
-        <div className="grid md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-          <div className="border-b border-border md:border-r md:border-b-0">
+        <div className="grid grid-cols-[minmax(0,1fr)] @2xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+          <div className={cn("@2xl:border-r @2xl:border-border", selected && "@max-2xl:hidden")}>
             <div className="relative p-2">
               <Search aria-hidden className="pointer-events-none absolute top-1/2 left-4.5 size-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 autoFocus
+                type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="cement, TMT, fly ash brick…"
-                className="pl-8"
+                className="h-10 pl-8 sm:h-9"
                 aria-label="Search materials"
               />
             </div>
-            <div className="max-h-80 overflow-y-auto px-2 pb-2">
+            <div className="max-h-[min(22rem,55svh)] overflow-y-auto overscroll-contain px-2 pb-2">
               {grouped.length === 0 && (
-                <p className="px-2 py-6 text-sm text-muted-foreground">
-                  Nothing matches. Add it as your own factor with its citation.
-                </p>
+                <p className="px-2 py-6 text-sm text-muted-foreground">No match. Add it as your own factor, with its source.</p>
               )}
               {grouped.map(([category, list]) => (
                 <div key={category} className="mb-2">
-                  <p className="condensed px-2 pt-2 pb-1 text-xs font-semibold text-muted-foreground">{category}</p>
+                  <p className="eyebrow px-2 pt-3 pb-1.5">{category}</p>
                   {list.map((m) => (
                     <button
                       key={m.id}
                       type="button"
                       onClick={() => setSelected(m)}
+                      aria-pressed={selected?.id === m.id}
                       className={cn(
-                        "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm transition-colors duration-100",
+                        "flex w-full items-center gap-3 rounded-md px-2 py-2 text-left text-sm transition-colors duration-100 sm:py-1.5",
                         selected?.id === m.id ? "bg-secondary" : "hover:bg-muted",
                       )}
                     >
                       <span className="min-w-0 flex-1 truncate">{m.name}</span>
-                      <span className="tabular shrink-0 text-xs text-muted-foreground">
+                      <span className="tabular shrink-0 font-mono text-2xs text-muted-foreground">
                         {fmt(m.gwp)}/{unitLabel(m.declaredUnit)}
                       </span>
                     </button>
@@ -122,13 +123,21 @@ export function MaterialPicker({
               ))}
             </div>
           </div>
-          <div className="p-4">
+          <div className={cn("p-4", !selected && "@max-2xl:hidden")}>
             {selected ? (
-              <SelectedMaterial key={selected.id} material={selected} onAdd={onAdd} />
+              <>
+                <button
+                  type="button"
+                  onClick={() => setSelected(null)}
+                  className="-mt-1 mb-3 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground @2xl:hidden"
+                >
+                  <ArrowLeft className="size-3.5" />
+                  All materials
+                </button>
+                <SelectedMaterial key={selected.id} material={selected} onAdd={onAdd} />
+              </>
             ) : (
-              <p className="text-sm text-muted-foreground">
-                Pick a material to see exactly where its number comes from.
-              </p>
+              <p className="text-sm text-muted-foreground">Pick a material to see where its number comes from.</p>
             )}
           </div>
         </div>
@@ -154,9 +163,9 @@ function SelectedMaterial({
       <div className="space-y-1.5">
         <QualityBadge quality={material.quality} />
         <h3 className="font-medium leading-snug">{material.name}</h3>
-        <p className="display tabular text-2xl font-semibold">
+        <p className="figure tabular text-3xl leading-none tracking-tight">
           {fmt(material.gwp)}
-          <span className="ml-1.5 text-sm font-normal text-muted-foreground [font-variation-settings:'wdth'_100]">
+          <span className="ml-1.5 font-sans text-sm font-normal tracking-normal text-muted-foreground [font-variation-settings:'wdth'_100]">
             kg CO₂e per {unitLabel(material.declaredUnit)}
           </span>
         </p>
@@ -166,8 +175,8 @@ function SelectedMaterial({
           </p>
         )}
       </div>
-      <dl className="grid grid-cols-[5.5rem_1fr] gap-x-3 gap-y-1 text-xs">
-        <dt className="text-muted-foreground">Source</dt>
+      <dl className="grid grid-cols-[5rem_1fr] gap-x-3 gap-y-1.5 text-xs">
+        <dt className="eyebrow">Source</dt>
         <dd>
           {source?.url ? (
             <a href={source.url} target="_blank" rel="noreferrer" className="underline underline-offset-2 hover:text-primary">
@@ -177,28 +186,28 @@ function SelectedMaterial({
             source?.short
           )}
         </dd>
-        <dt className="text-muted-foreground">Where</dt>
-        <dd>{material.source.locator}</dd>
-        <dt className="text-muted-foreground">Covers</dt>
+        <dt className="eyebrow">Where</dt>
+        <dd className="font-mono text-2xs">{material.source.locator}</dd>
+        <dt className="eyebrow">Covers</dt>
         <dd>
           {material.indicator}, {material.geography}, {material.year}
         </dd>
         {material.backgroundDb && (
           <>
-            <dt className="text-muted-foreground">Background</dt>
+            <dt className="eyebrow">Database</dt>
             <dd>{material.backgroundDb}</dd>
           </>
         )}
       </dl>
       {material.notes && <p className="text-xs leading-relaxed text-muted-foreground">{material.notes}</p>}
       <form
-        className="flex items-end gap-2"
+        className="flex flex-wrap items-end gap-2"
         onSubmit={(e) => {
           e.preventDefault();
           if (quantity && quantity > 0) onAdd(material, quantity, unit);
         }}
       >
-        <label className="flex-1 space-y-1 text-xs text-muted-foreground">
+        <label className="min-w-28 flex-1 space-y-1 text-xs text-muted-foreground">
           Quantity
           <NumberInput value={quantity} onChange={setQuantity} placeholder="0" autoFocus />
         </label>

@@ -20,7 +20,7 @@ export function DescribeBox({
   busy,
   placeholder,
   label,
-  submitLabel = "Draft the inventory",
+  submitLabel = "Draft",
   autoFocus,
 }: {
   value: string;
@@ -56,7 +56,7 @@ export function DescribeBox({
         <textarea
           ref={ref}
           aria-label={label}
-          placeholder={voice.listening ? "Listening… say what you're building" : placeholder}
+          placeholder={voice.listening ? "Listening…" : placeholder}
           value={value}
           maxLength={DRAFT_MAX_CHARS}
           rows={1}
@@ -80,7 +80,7 @@ export function DescribeBox({
               size="sm"
               disabled={busy}
               aria-pressed={voice.listening}
-              title="Voice typing uses the browser's own speech service (Chrome and Edge send the audio to Google or Microsoft)"
+              title="Uses your browser's speech service. Chrome and Edge send the audio to Google or Microsoft."
               onClick={() => {
                 if (voice.listening) {
                   voice.stop();

@@ -28,9 +28,9 @@ export function ModuleBreakdown({
       <StackedBar segments={segments} height={height} />
       <ul className={compact ? "space-y-1.5" : "grid gap-x-6 gap-y-1.5 sm:grid-cols-2"}>
         {TOTAL_MODULES.map((m) => (
-          <li key={m} className="flex items-center gap-2 text-sm">
+          <li key={m} className="flex min-w-0 items-center gap-2 text-sm">
             <LegendSwatch color={MODULE_META[m].color} />
-            <span className="w-11 shrink-0 font-medium">{MODULE_META[m].label}</span>
+            <span className="w-12 shrink-0 font-mono text-xs font-medium">{MODULE_META[m].label}</span>
             <span className="truncate text-muted-foreground">{MODULE_META[m].name}</span>
             <span className="tabular ml-auto">{fmt(modules[m])}</span>
             <span className="tabular w-12 text-right text-muted-foreground">
@@ -41,7 +41,7 @@ export function ModuleBreakdown({
         {modules.D !== 0 && (
           <li className="flex items-center gap-2 text-sm">
             <LegendSwatch className="hatch-d" />
-            <span className="w-11 shrink-0 font-medium">D</span>
+            <span className="w-12 shrink-0 font-mono text-xs font-medium">D</span>
             <span className="truncate text-muted-foreground">Outside total</span>
             <span className="tabular ml-auto">{fmt(modules.D)}</span>
             <span className="w-12" />

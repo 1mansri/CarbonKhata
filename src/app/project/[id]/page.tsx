@@ -4,5 +4,6 @@ export const metadata = { title: "Project" };
 
 export default async function ProjectPage({ params }: PageProps<"/project/[id]">) {
   const { id } = await params;
-  return <ProjectWorkspace id={id} />;
+  // Keyed so another project starts fresh (no carried-over draft or "new line" state).
+  return <ProjectWorkspace key={id} id={id} />;
 }

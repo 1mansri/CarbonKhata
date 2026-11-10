@@ -39,7 +39,7 @@ export function ProvenanceBar({ shares }: { shares: Map<DataQuality, number> }) 
 
   return (
     <div className="space-y-3">
-      <p className="display text-3xl font-semibold tabular">
+      <p className="figure tabular text-3xl leading-none tracking-tight">
         {fmt((india / total) * 100, 3)}%
         <span className="ml-2 align-middle text-sm font-normal text-muted-foreground [font-variation-settings:'wdth'_100]">
           of this total rests on Indian data

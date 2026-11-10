@@ -23,22 +23,27 @@ export function ResultsView({ project, result }: { project: Project; result: Pro
 
   return (
     <div className="grid gap-10 lg:grid-cols-2">
-      <section className="space-y-4 lg:col-span-2">
-        <p className="display tabular text-5xl font-semibold">
-          {total.value}
-          <span className="ml-2 text-lg font-normal text-muted-foreground [font-variation-settings:'wdth'_100]">
-            {total.unit}
-            {project.scope.functionalUnit && ` per ${project.scope.functionalUnit}`}
-          </span>
-        </p>
-        <ModuleBreakdown modules={result.modules} height={36} />
+      <section className="space-y-5 lg:col-span-2">
+        <div className="space-y-2">
+          <p className="eyebrow">Total</p>
+          <p className="figure tabular text-figure">
+            {total.value}
+            <span className="ml-2 font-sans text-lg font-normal tracking-normal text-muted-foreground [font-variation-settings:'wdth'_100]">
+              {total.unit}
+            </span>
+          </p>
+          {project.scope.functionalUnit && (
+            <p className="text-sm text-muted-foreground">per {project.scope.functionalUnit}</p>
+          )}
+        </div>
+        <ModuleBreakdown modules={result.modules} height={32} />
       </section>
 
-      <Panel title="Where the carbon comes from">
+      <Panel title="Biggest lines">
         <HotspotChart items={result.items} />
       </Panel>
 
-      <Panel title="How Indian is this number?">
+      <Panel title="How much is Indian data?">
         <ProvenanceBar shares={shares} />
       </Panel>
 
@@ -55,8 +60,8 @@ export function ResultsView({ project, result }: { project: Project; result: Pro
 
 function Panel({ title, className, children }: { title: string; className?: string; children: React.ReactNode }) {
   return (
-    <section className={`space-y-4 ${className ?? ""}`}>
-      <h2 className="condensed border-b border-border pb-2 text-sm font-semibold">{title}</h2>
+    <section className={`min-w-0 space-y-4 ${className ?? ""}`}>
+      <h2 className="border-b border-border pb-2.5 text-heading font-semibold">{title}</h2>
       {children}
     </section>
   );
@@ -83,8 +88,8 @@ function Uncertainty({ project, deterministic }: { project: Project; determinist
           {mc ? "Run again" : "Run 5,000 simulations"}
         </Button>
         <p className="text-xs text-muted-foreground">
-          Triangular distributions from each factor&apos;s published range, seed 42.
-          {stale && " Inputs changed since the last run."}
+          Each factor varies within its published range (triangular, seed 42).
+          {stale && " Inputs changed since this run."}
         </p>
       </div>
       {mc && (
@@ -103,9 +108,8 @@ function Uncertainty({ project, deterministic }: { project: Project; determinist
             <dd className="tabular text-right">{fmt(mc.result.coverage * 100, 3)}% of total</dd>
             {mc.result.coverage < 0.5 && (
               <dd className="col-span-2 mt-1 text-xs leading-relaxed text-warning">
-                Only {fmt(mc.result.coverage * 100, 2)}% of this total comes from factors with a published range; the
-                rest is held fixed, so the true uncertainty is wider than this interval. Choose range-bearing factors
-                (e.g. EPD means, Ministry of Steel routes) to widen coverage.
+                Only {fmt(mc.result.coverage * 100, 2)}% of the total has a published range. The rest is held fixed, so
+                the real uncertainty is wider. Factors with ranges (EPD means, steel routes) widen coverage.
               </dd>
             )}
           </dl>
@@ -115,42 +119,52 @@ function Uncertainty({ project, deterministic }: { project: Project; determinist
   );
 }
 
+/** Wide: a table. Narrow: one block per calculation, so nothing scrolls sideways. */
 function WorkingTable({ result }: { result: ProjectResult }) {
+  const cell = "px-3 py-2 align-top @max-2xl:p-0";
   return (
-    <div className="overflow-x-auto rounded-lg border border-border bg-card">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="condensed border-b border-border text-left text-xs text-muted-foreground">
-            <th className="px-3 py-2 font-semibold">Line</th>
-            <th className="px-3 py-2 font-semibold">Module</th>
-            <th className="px-3 py-2 font-semibold">Working</th>
-            <th className="px-3 py-2 text-right font-semibold">kg CO₂e</th>
+    <div className="@container rounded-lg border border-border bg-card">
+      <table className="w-full text-sm @max-2xl:block">
+        <thead className="@max-2xl:hidden">
+          <tr className="eyebrow border-b border-border text-left">
+            <th className="px-3 py-2 font-medium">Line</th>
+            <th className="px-3 py-2 font-medium">Module</th>
+            <th className="px-3 py-2 font-medium">Working</th>
+            <th className="px-3 py-2 text-right font-medium normal-case">kg CO₂e</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="@max-2xl:block">
           {result.items.flatMap((item) =>
             (Object.keys(item.working) as (keyof typeof item.working)[]).map((m, i) => (
-              <tr key={`${item.itemId}-${m}`} className="border-b border-border/60 last:border-b-0">
-                <td className="px-3 py-1.5 align-top">{i === 0 ? item.label : ""}</td>
-                <td className="px-3 py-1.5 align-top whitespace-nowrap">{MODULE_META[m].label}</td>
-                <td className="px-3 py-1.5 align-top text-xs text-muted-foreground">{item.working[m]}</td>
-                <td className="px-3 py-1.5 text-right align-top">{fmt(item.modules[m])}</td>
+              <tr
+                key={`${item.itemId}-${m}`}
+                className="border-b border-border/60 last:border-b-0 @max-2xl:grid @max-2xl:grid-cols-[auto_minmax(0,1fr)_auto] @max-2xl:gap-x-3 @max-2xl:gap-y-1 @max-2xl:px-3 @max-2xl:py-2.5"
+              >
+                <td className={`${cell} @max-2xl:col-span-3 @max-2xl:font-medium ${i === 0 ? "" : "@max-2xl:hidden"}`}>
+                  {i === 0 ? item.label : ""}
+                </td>
+                <td className={`${cell} font-mono text-2xs whitespace-nowrap @max-2xl:pt-px`}>{MODULE_META[m].label}</td>
+                <td className={`${cell} text-xs text-muted-foreground`}>{item.working[m]}</td>
+                <td className={`${cell} tabular text-right`}>{fmt(item.modules[m])}</td>
               </tr>
             )),
           )}
           {result.siteEnergy.map((e) => (
-            <tr key={e.itemId} className="border-b border-border/60 last:border-b-0">
-              <td className="px-3 py-1.5">{e.label}</td>
-              <td className="px-3 py-1.5">A5</td>
-              <td className="px-3 py-1.5 text-xs text-muted-foreground">{e.working}</td>
-              <td className="px-3 py-1.5 text-right">{fmt(e.value)}</td>
+            <tr
+              key={e.itemId}
+              className="border-b border-border/60 last:border-b-0 @max-2xl:grid @max-2xl:grid-cols-[auto_minmax(0,1fr)_auto] @max-2xl:gap-x-3 @max-2xl:gap-y-1 @max-2xl:px-3 @max-2xl:py-2.5"
+            >
+              <td className={`${cell} @max-2xl:col-span-3 @max-2xl:font-medium`}>{e.label}</td>
+              <td className={`${cell} font-mono text-2xs @max-2xl:pt-px`}>A5</td>
+              <td className={`${cell} text-xs text-muted-foreground`}>{e.working}</td>
+              <td className={`${cell} tabular text-right`}>{fmt(e.value)}</td>
             </tr>
           ))}
-          <tr className="bg-muted/50 font-medium">
-            <td className="px-3 py-2" colSpan={3}>
-              Total A1–A5 + C1–C4 (D reported separately)
+          <tr className="bg-muted/50 font-medium @max-2xl:flex @max-2xl:justify-between @max-2xl:gap-3 @max-2xl:px-3 @max-2xl:py-2.5">
+            <td className="px-3 py-2.5 @max-2xl:p-0" colSpan={3}>
+              Total (D reported separately)
             </td>
-            <td className="px-3 py-2 text-right">{fmt(result.total)}</td>
+            <td className="tabular px-3 py-2.5 text-right @max-2xl:p-0">{fmt(result.total)}</td>
           </tr>
         </tbody>
       </table>

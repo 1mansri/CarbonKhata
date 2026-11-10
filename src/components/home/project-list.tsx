@@ -51,7 +51,7 @@ export function ProjectList() {
   return (
     <section className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
-        <h2 className="condensed mr-auto text-sm font-semibold">Your projects</h2>
+        <h2 className="mr-auto text-heading font-semibold">Your projects</h2>
         <Button variant="ghost" size="sm" onClick={() => fileRef.current?.click()}>
           <FolderOpen />
           Open project file
@@ -78,7 +78,7 @@ export function ProjectList() {
         <Skeleton className="h-24 w-full" />
       ) : list.length === 0 ? (
         <p className="rounded-lg border border-dashed border-border px-4 py-8 text-center text-sm text-muted-foreground">
-          Nothing here yet. Start a project or open a worked example. Everything stays in this browser.
+          No projects yet. Start one, or open a worked example below. Projects stay in this browser.
         </p>
       ) : (
         <ul className="divide-y divide-border rounded-lg border border-border bg-card">
@@ -92,7 +92,7 @@ export function ProjectList() {
                 >
                   <span className="min-w-0">
                     <span className="block truncate font-medium">{p.name}</span>
-                    <span className="block truncate text-xs text-muted-foreground">
+                    <span className="mt-0.5 block truncate text-xs text-muted-foreground">
                       {p.scope.functionalUnit || "No functional unit"}, {p.items.length} line{p.items.length === 1 ? "" : "s"}
                     </span>
                   </span>

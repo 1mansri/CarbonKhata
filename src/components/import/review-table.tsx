@@ -67,38 +67,49 @@ export function ReviewTable({
 }) {
   const set = (i: number, patch: Partial<ReviewLine>) => onChange(lines.map((x, j) => (j === i ? { ...x, ...patch } : x)));
 
+  // Wide: a table. Narrow (phones, or beside a sidebar): one card per row,
+  // so inputs never scroll sideways.
   return (
-    <div className="overflow-x-auto rounded-lg border border-border bg-card">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="border-b border-border text-left text-xs text-muted-foreground">
+    <div className="@container rounded-lg border border-border bg-card">
+      <table className="w-full text-sm @max-2xl:block">
+        <thead className="@max-2xl:hidden">
+          <tr className="eyebrow border-b border-border text-left">
             <th className="px-3 py-2 font-medium">{itemHeading}</th>
             <th className="px-3 py-2 text-right font-medium">Quantity</th>
             <th className="px-3 py-2 font-medium">Library material</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="enter-stagger @max-2xl:block">
           {lines.map((l, i) => {
             const m = l.materialId ? getMaterial(l.materialId) : undefined;
             const unitOk = !m || (l.unit && compatibleUnits(m).includes(l.unit.unit));
             const unitChoices = m ? compatibleUnits(m) : MATERIAL_UNITS;
             return (
-              <tr key={i} className="border-b border-border/60 align-top last:border-b-0">
-                <td className="px-3 py-2">
-                  {l.text || <span className="text-muted-foreground">Your component: pick its material</span>}
-                  {l.basis && <p className="mt-1 max-w-sm text-xs text-muted-foreground">{l.basis}</p>}
+              <tr
+                key={i}
+                // Rows the reviewer adds appear at once; drafted rows arrive in a quick stagger.
+                style={{ "--i": l.manual ? 0 : i } as React.CSSProperties}
+                className="border-b border-border/60 align-top last:border-b-0 @max-2xl:grid @max-2xl:gap-2.5 @max-2xl:p-3"
+              >
+                <td className="px-3 py-2.5 @max-2xl:p-0">
+                  <span className="font-medium">
+                    {l.text || <span className="font-normal text-muted-foreground">New component: pick a material</span>}
+                  </span>
+                  {l.basis && (
+                    <p className="mt-1 max-w-md font-mono text-2xs leading-relaxed text-muted-foreground">{l.basis}</p>
+                  )}
                 </td>
-                <td className="px-3 py-2 text-right whitespace-nowrap">
+                <td className="px-3 py-2.5 text-right whitespace-nowrap @max-2xl:p-0 @max-2xl:text-left">
                   {editable ? (
-                    <div className="flex items-center justify-end gap-1.5">
+                    <div className="flex items-center justify-end gap-1.5 @max-2xl:justify-start">
                       <NumberInput
-                        aria-label={`Quantity of ${l.text}`}
-                        className="w-24"
+                        aria-label={`Quantity of ${l.text || "new component"}`}
+                        className="w-28"
                         value={l.quantity ?? undefined}
                         onChange={(q) => set(i, { quantity: q ?? null, manual: true })}
                       />
                       <NativeSelect
-                        aria-label={`Unit of ${l.text}`}
+                        aria-label={`Unit of ${l.text || "new component"}`}
                         className="w-[4.5rem]"
                         value={l.unit?.unit ?? ""}
                         onChange={(e) => {
@@ -115,27 +126,27 @@ export function ReviewTable({
                       </NativeSelect>
                     </div>
                   ) : l.quantity == null ? (
-                    <span className="text-warning">missing</span>
+                    <span className="text-warning">Quantity missing</span>
                   ) : (
-                    <>
+                    <span className="tabular">
                       {fmt(l.quantity)} {l.rawUnit}
                       {l.unit && l.unit.factor !== 1 && (
-                        <div className="text-xs text-muted-foreground">
+                        <span className="block text-xs text-muted-foreground">
                           = {fmt(l.quantity * l.unit.factor)} {unitLabel(l.unit.unit)}
-                        </div>
+                        </span>
                       )}
-                      {!l.unit && <div className="text-xs text-warning">unit not recognised</div>}
-                    </>
+                      {!l.unit && <span className="block text-xs text-warning">Unit not recognised</span>}
+                    </span>
                   )}
                 </td>
-                <td className="px-3 py-2">
+                <td className="px-3 py-2.5 @max-2xl:p-0">
                   <NativeSelect
-                    aria-label={`Material for ${l.text}`}
-                    className="w-full min-w-56"
+                    aria-label={`Material for ${l.text || "new component"}`}
+                    className="w-full @2xl:min-w-56"
                     value={l.materialId}
                     onChange={(e) => set(i, { materialId: e.target.value })}
                   >
-                    <option value="">{editable ? "No library match: skip" : "Skip this row"}</option>
+                    <option value="">{editable ? "No match: skip this line" : "Skip this row"}</option>
                     {MATERIALS.map((mat) => (
                       <option key={mat.id} value={mat.id}>
                         {mat.name}
@@ -144,8 +155,7 @@ export function ReviewTable({
                   </NativeSelect>
                   {m && !unitOk && (
                     <p className="mt-1 text-xs text-warning">
-                      {l.rawUnit || "This unit"} can&apos;t be converted for this factor (needs{" "}
-                      {compatibleUnits(m).map(unitLabel).join(", ")}).
+                      {l.rawUnit || "This unit"} doesn&apos;t fit this factor. Use {compatibleUnits(m).map(unitLabel).join(", ")}.
                     </p>
                   )}
                 </td>
@@ -190,8 +200,13 @@ export function AddToProject({
   }
 
   return (
-    <div className="flex flex-wrap items-center justify-end gap-3">
-      <NativeSelect aria-label="Add to project" value={target} onChange={(e) => setTarget(e.target.value)} className="w-64">
+    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
+      <NativeSelect
+        aria-label="Add to project"
+        value={target}
+        onChange={(e) => setTarget(e.target.value)}
+        className="w-full sm:w-64"
+      >
         <option value="new">New project</option>
         {Object.values(projects ?? {}).map((p) => (
           <option key={p.id} value={p.id}>
@@ -199,7 +214,7 @@ export function AddToProject({
           </option>
         ))}
       </NativeSelect>
-      <Button disabled={usable.length === 0} onClick={add}>
+      <Button disabled={usable.length === 0} onClick={add} className="h-9 sm:h-8">
         Add {usable.length} line{usable.length === 1 ? "" : "s"} to the ledger
       </Button>
     </div>

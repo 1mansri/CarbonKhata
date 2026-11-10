@@ -23,8 +23,10 @@ export function SiteEnergy({
   if (!project.scope.boundary.a5) return null;
 
   return (
-    <section className="space-y-3">
-      <h2 className="condensed text-sm font-semibold">Site energy and water (A5)</h2>
+    <section className="@container space-y-3">
+      <h2 className="text-base font-semibold">
+        Site energy and water <span className="font-mono text-xs font-medium text-muted-foreground">A5</span>
+      </h2>
       {project.siteEnergy.length > 0 && (
         <ul className="divide-y divide-border rounded-lg border border-border bg-card">
           {project.siteEnergy.map((e) => {
@@ -32,9 +34,9 @@ export function SiteEnergy({
             return (
               <li
                 key={e.id}
-                className="grid grid-cols-[minmax(0,1fr)_6.5rem_2rem] items-center gap-x-3 gap-y-2 px-3 py-2 md:grid-cols-[minmax(0,1fr)_7rem_6.5rem_2rem]"
+                className="grid grid-cols-[minmax(0,1fr)_6.5rem_2rem] items-center gap-x-3 gap-y-2 px-3 py-2.5 @xl:grid-cols-[minmax(0,1fr)_7.5rem_6.5rem_2rem]"
               >
-                <span className="col-span-3 flex min-w-0 flex-wrap items-center gap-2 md:col-span-1">
+                <span className="col-span-3 flex min-w-0 flex-wrap items-center gap-2 @xl:col-span-1">
                   <NativeSelect
                     aria-label="Energy or water source"
                     className="min-w-0 max-w-full"
@@ -67,7 +69,7 @@ export function SiteEnergy({
                       }))
                     }
                   />
-                  <span className="w-8 text-xs text-muted-foreground">{unitLabel(e.factor.unit)}</span>
+                  <span className="w-8 font-mono text-2xs text-muted-foreground">{unitLabel(e.factor.unit)}</span>
                 </span>
                 <span className="tabular text-right text-sm font-medium" title={r?.working}>
                   {fmt(r?.value ?? 0)}

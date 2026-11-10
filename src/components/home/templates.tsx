@@ -26,12 +26,15 @@ export function Templates() {
   if (TEMPLATES.length === 0) return null;
 
   return (
-    <section className="space-y-6">
-      <h2 className="condensed text-sm font-semibold">Worked examples</h2>
+    <section className="space-y-7">
+      <div className="space-y-1">
+        <h2 className="text-heading font-semibold">Worked examples</h2>
+        <p className="text-sm text-muted-foreground">Open one to see every line and its source.</p>
+      </div>
       {GROUPS.map(([group, templates]) => (
         <div key={group} className="space-y-3">
-          <h3 className="text-sm text-muted-foreground">{group}</h3>
-          <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+          <h3 className="text-sm font-medium">{group}</h3>
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {templates.map((t) => {
               const total = TOTALS[t.id];
               return (
@@ -43,17 +46,18 @@ export function Templates() {
                       saveProject(p);
                       router.push(`/project/${p.id}`);
                     }}
-                    className="group flex h-full w-full flex-col gap-2 rounded-lg border border-border bg-card p-4 text-left transition-[border-color,transform] duration-150 ease-(--ease-out) hover:border-foreground/30 active:scale-[0.99] motion-reduce:active:scale-100"
+                    className="group flex h-full w-full flex-col gap-3 rounded-lg border border-border bg-card p-4 text-left transition-[border-color,transform] duration-150 ease-(--ease-out) hover:border-foreground/30 active:scale-[0.99] motion-reduce:active:scale-100 sm:p-5"
                   >
-                    <span className="flex items-baseline justify-between gap-4">
-                      <span className="font-medium group-hover:text-primary">{t.title}</span>
-                      <span className="tabular shrink-0 text-sm">
-                        {total.value} <span className="text-muted-foreground">{total.unit}</span>
+                    <span className="font-medium leading-snug group-hover:text-primary">{t.title}</span>
+                    <span className="figure tabular text-3xl leading-none tracking-tight">
+                      {total.value}
+                      <span className="ml-1.5 font-sans text-sm font-normal tracking-normal text-muted-foreground [font-variation-settings:'wdth'_100]">
+                        {total.unit}
                       </span>
                     </span>
                     <span className="text-sm text-muted-foreground">{t.summary}</span>
-                    <span className="mt-auto text-xs text-muted-foreground">
-                      {t.kind === "reproduces" ? "Reproduces" : "Quantities from"} {t.basedOn}
+                    <span className="mt-auto border-t border-dashed border-border pt-3 font-mono text-2xs leading-relaxed text-muted-foreground">
+                      {t.kind === "reproduces" ? "Reproduces" : "From"} {t.basedOn}
                     </span>
                   </button>
                 </li>

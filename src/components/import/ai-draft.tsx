@@ -115,17 +115,20 @@ export function DraftReview({
 }) {
   const unmatched = lines.filter((l) => !l.materialId).length;
   return (
-    <div className="space-y-5">
-      <div className="flex flex-wrap items-start gap-3">
-        <div className="mr-auto max-w-2xl space-y-1">
-          <p className="font-medium">{draft.projectName}</p>
+    <div className="enter-rise space-y-5">
+      <div className="flex items-start gap-3">
+        <div className="mr-auto max-w-2xl space-y-1.5">
+          <p className="text-base font-semibold">{draft.projectName}</p>
           <p className="text-sm text-muted-foreground">
-            Per {draft.functionalUnit || "the stated item"}. {draft.assumptions}
+            {draft.functionalUnit && <>Per {draft.functionalUnit}. </>}
+            {draft.assumptions}
           </p>
           <p className="text-xs text-warning">
-            Sizes and any extra materials are AI estimates ({draft.model}): check each line. Materials per unit of
-            masonry and concrete come from CPWD analyses; carbon factors only from the cited library.
-            {unmatched > 0 && ` ${unmatched} component${unmatched === 1 ? " has" : "s have"} no library match yet.`}
+            AI sized these lines ({draft.model}). Check each one.
+            {unmatched > 0 && ` ${unmatched} ${unmatched === 1 ? "has" : "have"} no library match.`}
+          </p>
+          <p className="text-xs text-muted-foreground">
+            Material per unit comes from CPWD analyses. Carbon factors come only from the cited library.
           </p>
         </div>
         {actions}
@@ -138,7 +141,7 @@ export function DraftReview({
           <Plus />
           Add a missing component
         </Button>
-        <span className="text-sm text-muted-foreground">
+        <span className="tabular text-sm text-muted-foreground">
           {lines.filter(isUsable).length} of {lines.length} ready
         </span>
       </div>
@@ -212,7 +215,7 @@ export function AiDraft({ initial = "" }: { initial?: string }) {
     <div className="space-y-3">
       <DescribeBox
         label="What do you want to assess?"
-        placeholder="e.g. 230 mm clay brick wall, 10 m². Type it or tap Speak."
+        placeholder="e.g. 230 mm clay brick wall, 10 m²"
         value={text}
         onChange={setText}
         onSubmit={(t) => void run(t)}
@@ -226,12 +229,11 @@ export function AiDraft({ initial = "" }: { initial?: string }) {
         }}
       />
       {draft && !draft.inScope && (
-        <p className="text-sm text-warning">{draft.reason || "That isn't a construction item this tool covers."}</p>
+        <p className="text-sm text-warning">{draft.reason || "This tool covers construction items only."}</p>
       )}
       {error && <p className="text-sm text-destructive">{error}</p>}
       <p className="text-xs text-muted-foreground">
-        Construction items only. The description is sent to Groq to draft components and quantities; every carbon
-        factor still comes from the cited library, and you review each line before it enters the ledger.
+        Your text goes to Groq to draft the lines. Carbon factors come only from the cited library.
       </p>
     </div>
   );

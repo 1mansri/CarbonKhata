@@ -20,10 +20,10 @@ export function ScopeForm({
   return (
     <div className="max-w-3xl space-y-8">
       <section className="space-y-3">
-        <h2 className="condensed text-sm font-semibold">System boundary</h2>
+        <h2 className="text-heading font-semibold">System boundary</h2>
         <BoundaryDiagram boundary={scope.boundary} onChange={(boundary) => setScope({ boundary })} />
         <p className="text-xs text-muted-foreground">
-          Tap a module to include or exclude it. B1–B7 (use stage) is outside this tool. D is reported beside the
+          Tap a module to include it or leave it out. The use stage (B1–B7) isn&apos;t covered. D is shown beside the
           total, never added to it.
         </p>
       </section>
@@ -38,19 +38,19 @@ export function ScopeForm({
           />
         </label>
         <label className="space-y-1.5 text-sm sm:col-span-2">
-          <span className="font-medium">Goal of the study</span>
+          <span className="font-medium">Goal</span>
           <textarea
             value={scope.goal}
             onChange={(e) => setScope({ goal: e.target.value })}
             rows={3}
             placeholder="Compare the cradle-to-gate carbon of OPC and fly-ash concrete for a thesis chapter."
-            className="w-full rounded-md border border-input bg-card px-2.5 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30"
+            className="w-full rounded-md border border-input bg-card px-2.5 py-2 text-base outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 sm:text-sm"
           />
         </label>
         <label className="space-y-1.5 text-sm">
           <span className="font-medium">Gross floor area (optional)</span>
           <span className="flex items-center gap-2">
-            <NumberInput value={scope.floorAreaM2} onChange={(v) => setScope({ floorAreaM2: v })} placeholder="m²" />
+            <NumberInput value={scope.floorAreaM2} onChange={(v) => setScope({ floorAreaM2: v })} placeholder="0" className="max-w-40" />
             <span className="text-xs text-muted-foreground">m²</span>
           </span>
         </label>
@@ -61,7 +61,7 @@ export function ScopeForm({
             onChange={(e) => setScope({ assumptions: e.target.value })}
             rows={3}
             placeholder="Fly ash and GGBS enter burden-free (cut-off). Formwork excluded."
-            className="w-full rounded-md border border-input bg-card px-2.5 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30"
+            className="w-full rounded-md border border-input bg-card px-2.5 py-2 text-base outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 sm:text-sm"
           />
         </label>
       </section>

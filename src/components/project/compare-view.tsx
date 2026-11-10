@@ -31,14 +31,14 @@ export function CompareView({ project }: { project: Project }) {
   return (
     <div className="grid gap-8 lg:grid-cols-[16rem_minmax(0,1fr)]">
       <div className="space-y-3">
-        <p className="text-sm font-medium">Compare with</p>
+        <p className="eyebrow">Compare with</p>
         {others.length === 0 ? (
           <p className="text-sm text-muted-foreground">No other projects yet.</p>
         ) : (
           <ul className="space-y-1">
             {others.map((p) => (
               <li key={p.id}>
-                <label className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-muted">
+                <label className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm hover:bg-muted sm:py-1.5">
                   <input
                     type="checkbox"
                     className="size-4 accent-(--primary)"
@@ -70,13 +70,13 @@ export function CompareView({ project }: { project: Project }) {
       <div className="space-y-5">
         {units.size > 1 && (
           <p className="rounded-md border border-dashed border-warning/60 px-3 py-2 text-sm text-warning">
-            These projects use different functional units, so their totals aren&apos;t directly comparable.
+            Different functional units: these totals can&apos;t be compared directly.
           </p>
         )}
         <ol className="space-y-4">
           {rows.map(({ project: p, result }, i) => (
             <li key={p.id} className="grid gap-1.5">
-              <div className="flex items-baseline gap-3 text-sm">
+              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 text-sm">
                 {i === 0 ? (
                   <span className="font-medium">{p.name}</span>
                 ) : (
@@ -84,8 +84,8 @@ export function CompareView({ project }: { project: Project }) {
                     {p.name}
                   </Link>
                 )}
-                <span className="text-xs text-muted-foreground">{p.scope.functionalUnit}</span>
-                <span className="tabular ml-auto">{fmt(result.total)} kg CO₂e</span>
+                <span className="min-w-0 truncate text-xs text-muted-foreground">{p.scope.functionalUnit}</span>
+                <span className="tabular ml-auto whitespace-nowrap">{fmt(result.total)} kg CO₂e</span>
                 <span className="tabular w-16 text-right text-xs text-muted-foreground">
                   {i === 0 ? "baseline" : base > 0 ? `${result.total >= base ? "+" : "−"}${fmt((Math.abs(result.total - base) / base) * 100, 2)}%` : ""}
                 </span>

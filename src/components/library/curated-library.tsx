@@ -81,7 +81,7 @@ export function CuratedLibrary() {
       </div>
       {groups.map((g) => (
         <section key={g} className="space-y-2">
-          <h2 className="condensed text-sm font-semibold">{g}</h2>
+          <h2 className="text-heading font-semibold">{g}</h2>
           <FactorStrip materials={MATERIALS.filter((m) => rows.some((r) => r.id === m.id && r.group === g))} />
           <div className="overflow-x-auto rounded-lg border border-border bg-card">
             <table className="w-full text-sm">

@@ -13,7 +13,7 @@ export default async function LibraryPage({ searchParams }: PageProps<"/library"
   return (
     <div className="flex flex-col gap-6">
       <div className="max-w-2xl space-y-2">
-        <h1 className="display text-3xl font-semibold">Library</h1>
+        <h1 className="display text-title font-semibold">Library</h1>
         <p className="text-muted-foreground">
           Every factor with its source, page and licence. Indian data first; proxies are marked.
         </p>

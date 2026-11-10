@@ -53,10 +53,10 @@ export function ReportDocument({ project }: { project: Project }) {
   result.warnings.forEach((w) => limitations.push(`Data gap: ${w}`));
 
   return (
-    <article className="mx-auto max-w-3xl space-y-10 text-[15px] leading-relaxed print:max-w-none print:text-[11pt]">
-      <header className="space-y-2 border-b border-border pb-6">
-        <p className="text-sm text-muted-foreground">Embodied carbon assessment</p>
-        <h1 className="display text-3xl font-semibold">{project.name}</h1>
+    <article className="@container mx-auto max-w-3xl space-y-10 text-[15px] leading-relaxed print:max-w-none print:text-[11pt]">
+      <header className="space-y-2.5 border-b border-border pb-6">
+        <p className="eyebrow">Embodied carbon assessment</p>
+        <h1 className="display text-title font-semibold">{project.name}</h1>
         <p className="text-sm text-muted-foreground">
           Prepared with {BRAND.name} on {new Date().toISOString().slice(0, 10)}, following ISO 14040/14044 and the EN
           15804+A2 module structure.
@@ -68,7 +68,7 @@ export function ReportDocument({ project }: { project: Project }) {
       </Section>
 
       <Section n="2" title="Scope">
-        <dl className="grid grid-cols-[11rem_1fr] gap-x-4 gap-y-2">
+        <dl className="grid gap-x-4 gap-y-1 @xl:grid-cols-[11rem_1fr] @xl:gap-y-2 [&>dd]:mb-2 @xl:[&>dd]:mb-0">
           <dt className="text-muted-foreground">Functional unit</dt>
           <dd>{scope.functionalUnit || "Not stated"}</dd>
           <dt className="text-muted-foreground">System boundary</dt>
@@ -84,42 +84,41 @@ export function ReportDocument({ project }: { project: Project }) {
       </Section>
 
       <Section n="3" title="Life cycle inventory">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-border text-left text-xs text-muted-foreground">
+        {/* Narrow screens: one block per line. Print and wide screens: a table. */}
+        <table className="w-full text-sm @max-xl:block">
+          <thead className="@max-xl:hidden">
+            <tr className="eyebrow border-b border-border text-left">
               <th className="py-1.5 pr-2 font-medium">Material</th>
               <th className="py-1.5 pr-2 text-right font-medium">Quantity</th>
               <th className="py-1.5 pr-2 text-right font-medium">Factor</th>
               <th className="py-1.5 font-medium">Source</th>
             </tr>
           </thead>
-          <tbody>
-            {project.items.map((item) => (
-              <tr key={item.id} className="border-b border-border/60 align-top">
-                <td className="py-1.5 pr-2">{item.label || item.material.name}</td>
-                <td className="py-1.5 pr-2 text-right whitespace-nowrap">
-                  {fmt(item.quantity)} {unitLabel(item.unit)}
-                </td>
-                <td className="py-1.5 pr-2 text-right whitespace-nowrap">
-                  {fmt(item.material.gwp)} /{unitLabel(item.material.declaredUnit)}
-                </td>
-                <td className="py-1.5 text-xs text-muted-foreground">
-                  {getSource(item.material.source.sourceId)?.short}, {item.material.source.locator}
-                </td>
-              </tr>
-            ))}
-            {project.siteEnergy.map((e) => (
-              <tr key={e.id} className="border-b border-border/60 align-top">
-                <td className="py-1.5 pr-2">{e.factor.name}</td>
-                <td className="py-1.5 pr-2 text-right whitespace-nowrap">
-                  {fmt(e.quantity)} {unitLabel(e.factor.unit)}
-                </td>
-                <td className="py-1.5 pr-2 text-right whitespace-nowrap">
-                  {fmt(e.factor.value)} /{unitLabel(e.factor.unit)}
-                </td>
-                <td className="py-1.5 text-xs text-muted-foreground">
-                  {getSource(e.factor.source.sourceId)?.short}, {e.factor.source.locator}
-                </td>
+          <tbody className="@max-xl:block">
+            {[
+              ...project.items.map((item) => ({
+                id: item.id,
+                name: item.label || item.material.name,
+                qty: `${fmt(item.quantity)} ${unitLabel(item.unit)}`,
+                factor: `${fmt(item.material.gwp)} /${unitLabel(item.material.declaredUnit)}`,
+                source: `${getSource(item.material.source.sourceId)?.short}, ${item.material.source.locator}`,
+              })),
+              ...project.siteEnergy.map((e) => ({
+                id: e.id,
+                name: e.factor.name,
+                qty: `${fmt(e.quantity)} ${unitLabel(e.factor.unit)}`,
+                factor: `${fmt(e.factor.value)} /${unitLabel(e.factor.unit)}`,
+                source: `${getSource(e.factor.source.sourceId)?.short}, ${e.factor.source.locator}`,
+              })),
+            ].map((row) => (
+              <tr
+                key={row.id}
+                className="border-b border-border/60 align-top @max-xl:grid @max-xl:grid-cols-[minmax(0,1fr)_auto] @max-xl:gap-x-3 @max-xl:py-2"
+              >
+                <td className="py-1.5 pr-2 @max-xl:col-span-2 @max-xl:p-0 @max-xl:font-medium">{row.name}</td>
+                <td className="tabular py-1.5 pr-2 text-right whitespace-nowrap @max-xl:p-0 @max-xl:text-left">{row.qty}</td>
+                <td className="tabular py-1.5 pr-2 text-right whitespace-nowrap @max-xl:p-0">{row.factor}</td>
+                <td className="py-1.5 text-xs text-muted-foreground @max-xl:col-span-2 @max-xl:p-0">{row.source}</td>
               </tr>
             ))}
           </tbody>
@@ -140,7 +139,7 @@ export function ReportDocument({ project }: { project: Project }) {
                 <td className="py-1">
                   {MODULE_META[m].label} {MODULE_META[m].name}
                 </td>
-                <td className="py-1 text-right">{fmt(result.modules[m])}</td>
+                <td className="tabular py-1 text-right">{fmt(result.modules[m])}</td>
               </tr>
             ))}
           </tbody>
@@ -180,8 +179,8 @@ export function ReportDocument({ project }: { project: Project }) {
 function Section({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
   return (
     <section className="space-y-4 break-inside-avoid-page">
-      <h2 className="flex items-baseline gap-3 text-lg font-semibold">
-        <span className="tabular text-muted-foreground">{n}</span>
+      <h2 className="flex items-baseline gap-3 text-heading font-semibold">
+        <span className="tabular font-mono text-sm font-medium text-muted-foreground">{n}</span>
         {title}
       </h2>
       {children}

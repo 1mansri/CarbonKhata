@@ -11,7 +11,7 @@ import { useProjectEditor } from "@/components/project/use-project-editor";
 import { Ledger } from "@/components/project/ledger";
 import { ProjectAi } from "@/components/project/project-ai";
 import { SiteEnergy } from "@/components/project/site-energy";
-import { LiveTotal } from "@/components/project/live-total";
+import { LiveTotal, TotalBar } from "@/components/project/live-total";
 import { ResultsView } from "@/components/project/results-view";
 import { ScopeForm } from "@/components/project/scope-form";
 import { CompareView } from "@/components/project/compare-view";
@@ -43,10 +43,8 @@ export function ProjectWorkspace({ id }: { id: string }) {
   if (project === null || !result) {
     return (
       <div className="space-y-3 py-16 text-center">
-        <p className="font-medium">This project isn&apos;t in this browser.</p>
-        <p className="text-sm text-muted-foreground">
-          Projects are saved per browser. Import its project file from the projects page.
-        </p>
+        <p className="font-medium">This project isn&apos;t saved in this browser.</p>
+        <p className="text-sm text-muted-foreground">Open its project file from the projects page.</p>
         <Button variant="outline" render={<Link href="/" />} nativeButton={false}>
           Go to projects
         </Button>
@@ -64,10 +62,13 @@ export function ProjectWorkspace({ id }: { id: string }) {
   ];
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-start gap-4">
-        <div className="min-w-0 flex-1 space-y-1.5">
-          <Link href="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+    <div className="flex flex-col gap-5 sm:gap-6">
+      <div className="flex items-start gap-3 sm:gap-4">
+        <div className="min-w-0 flex-1 space-y-2">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors duration-150 hover:text-foreground"
+          >
             <ArrowLeft className="size-3.5" />
             Projects
           </Link>
@@ -77,19 +78,19 @@ export function ProjectWorkspace({ id }: { id: string }) {
             value={project.name}
             onChange={(e) => update((p) => ({ ...p, name: e.target.value.replace(/\n/g, " ") }))}
             onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), e.currentTarget.blur())}
-            className="display block w-full resize-none rounded-md bg-transparent text-xl font-semibold outline-none field-sizing-content sm:text-2xl md:text-3xl focus-visible:ring-3 focus-visible:ring-ring/30"
+            className="display -mx-1 block w-[calc(100%+0.5rem)] resize-none rounded-md bg-transparent px-1 text-title font-semibold [text-wrap:balance] outline-none field-sizing-content focus-visible:ring-3 focus-visible:ring-ring/30"
           />
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
-            <span>{project.scope.functionalUnit || "No functional unit yet"}</span>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-sm text-muted-foreground">
+            <span>{project.scope.functionalUnit || "No functional unit"}</span>
             <span className="flex items-center gap-1" aria-label="Modules in the system boundary">
               {included.map((m) => (
                 <span
                   key={m.label}
-                  className="condensed rounded-sm px-1.5 py-0.5 text-[11px] font-semibold"
+                  className="rounded-[3px] px-1.5 py-px font-mono text-2xs font-medium"
                   style={
                     m.on
                       ? { backgroundColor: `color-mix(in oklab, ${m.color} 18%, transparent)`, color: "var(--foreground)" }
-                      : { textDecoration: "line-through", opacity: 0.5 }
+                      : { textDecoration: "line-through", opacity: 0.45 }
                   }
                 >
                   {m.label}
@@ -112,12 +113,13 @@ export function ProjectWorkspace({ id }: { id: string }) {
       </div>
 
       <Tabs.Root defaultValue="ledger" className="flex flex-col gap-6">
-        <Tabs.List className="relative flex gap-1 overflow-x-auto border-b border-border [scrollbar-width:none]">
+        {/* Sticky under the site header, so Results is one tap away from row 78. */}
+        <Tabs.List className="sticky top-14 z-30 -mx-4 flex gap-0.5 overflow-x-auto border-b border-border bg-background/90 px-4 backdrop-blur-md [scrollbar-width:none] sm:-mx-6 sm:gap-1 sm:px-6 lg:-mx-8 lg:px-8 print:hidden">
           {TABS.map((t) => (
             <Tabs.Tab
               key={t.value}
               value={t.value}
-              className="relative z-10 h-9 px-3 text-sm whitespace-nowrap text-muted-foreground outline-none transition-colors duration-150 hover:text-foreground focus-visible:text-foreground data-active:font-medium data-active:text-foreground"
+              className="relative z-10 h-10 shrink-0 px-2.5 text-sm whitespace-nowrap text-muted-foreground outline-none transition-colors duration-150 hover:text-foreground focus-visible:text-foreground data-active:font-medium data-active:text-foreground sm:px-3"
             >
               {t.label}
             </Tabs.Tab>
@@ -126,7 +128,11 @@ export function ProjectWorkspace({ id }: { id: string }) {
         </Tabs.List>
 
         {/* Kept mounted so an AI draft under review survives a look at another tab. */}
-        <Tabs.Panel value="ledger" keepMounted className="flex flex-col gap-6 outline-none data-hidden:hidden">
+        <Tabs.Panel
+          value="ledger"
+          keepMounted
+          className="flex flex-col gap-6 pb-20 outline-none data-hidden:hidden lg:pb-0"
+        >
           {/* Full width so the review table has room before its lines join the ledger. */}
           <ProjectAi project={project} update={update} />
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
@@ -134,10 +140,11 @@ export function ProjectWorkspace({ id }: { id: string }) {
               <Ledger project={project} result={result} update={update} />
               <SiteEnergy project={project} result={result} update={update} />
             </div>
-            <div className="lg:sticky lg:top-20 lg:self-start">
-              <LiveTotal project={project} result={result} />
+            <div className="lg:sticky lg:top-28 lg:self-start">
+              <LiveTotal id="ledger-total" project={project} result={result} />
             </div>
           </div>
+          {project.items.length > 0 && <TotalBar targetId="ledger-total" result={result} />}
         </Tabs.Panel>
         <Tabs.Panel value="results" className="outline-none">
           <ResultsView project={project} result={result} />
@@ -149,7 +156,7 @@ export function ProjectWorkspace({ id }: { id: string }) {
           <CompareView project={project} />
         </Tabs.Panel>
         <Tabs.Panel value="report" className="outline-none">
-          <div className="rounded-lg border border-border bg-card px-6 py-10 sm:px-10">
+          <div className="rounded-lg border border-border bg-card px-4 py-8 sm:px-10 sm:py-10">
             <ReportDocument project={project} />
           </div>
         </Tabs.Panel>
@@ -170,9 +177,9 @@ function ExportMenu(props: {
 }) {
   return (
     <Menu.Root>
-      <Menu.Trigger render={<Button variant="outline" />}>
+      <Menu.Trigger render={<Button variant="outline" className="max-sm:size-9 max-sm:px-0" />} aria-label="Export">
         <Download />
-        Export
+        <span className="max-sm:sr-only">Export</span>
       </Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner sideOffset={6} align="end" className="z-50 outline-none">

@@ -105,16 +105,18 @@ export function ProjectAi({ project, update }: { project: Project; update: Updat
     return (
       <section
         aria-label="AI draft"
-        className="space-y-4 rounded-lg border border-dashed border-brand-accent/60 bg-brand-accent/5 p-3 sm:p-4"
+        className="enter-rise space-y-4 rounded-lg border border-dashed border-brand-accent/60 bg-brand-accent/5 p-3 sm:p-5"
       >
         {renamed && (
           <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
             <Sparkles className="size-3.5 text-brand-accent" aria-hidden />
-            <span>
-              Title set from your description (was &ldquo;{renamed.from}&rdquo;).
-            </span>
-            <button type="button" onClick={undoRename} className="font-medium text-foreground underline underline-offset-2">
-              Keep the old title
+            <span>Renamed from &ldquo;{renamed.from}&rdquo;.</span>
+            <button
+              type="button"
+              onClick={undoRename}
+              className="font-medium text-foreground underline decoration-foreground/30 underline-offset-2 transition-colors hover:decoration-foreground"
+            >
+              Undo
             </button>
           </p>
         )}
@@ -123,14 +125,14 @@ export function ProjectAi({ project, update }: { project: Project; update: Updat
           lines={lines}
           onChange={setLines}
           actions={
-            <Button variant="ghost" onClick={discard}>
+            <Button variant="ghost" onClick={discard} aria-label="Discard draft" className="max-sm:size-8 max-sm:px-0">
               <X />
-              Discard
+              <span className="max-sm:sr-only">Discard</span>
             </Button>
           }
         >
-          <div className="flex justify-end">
-            <Button disabled={usable === 0} onClick={() => addToLedger(draft)}>
+          <div className="flex sm:justify-end">
+            <Button disabled={usable === 0} onClick={() => addToLedger(draft)} className="h-9 w-full sm:h-8 sm:w-auto">
               Add {usable} line{usable === 1 ? "" : "s"} to this ledger
             </Button>
           </div>
@@ -140,22 +142,20 @@ export function ProjectAi({ project, update }: { project: Project; update: Updat
   }
 
   return (
-    <section aria-label="Draft with AI" className={empty ? "space-y-3 rounded-lg border border-border bg-card p-3 sm:p-4" : "space-y-2"}>
+    <section aria-label="Draft with AI" className={empty ? "space-y-3 rounded-lg border border-border bg-card p-4 sm:p-5" : "space-y-2"}>
       {empty && (
         <div className="space-y-0.5">
           <h2 className="flex items-center gap-1.5 font-medium">
             <Sparkles className="size-4 text-brand-accent" aria-hidden />
-            Describe what you&apos;re assessing
+            What are you assessing?
           </h2>
-          <p className="text-sm text-muted-foreground">
-            Type or speak it. AI finds the components and sizes them, and you check every line.
-          </p>
+          <p className="text-sm text-muted-foreground">Type or say it. AI finds the parts and sizes them; you check each line.</p>
         </div>
       )}
       <DescribeBox
-        label={empty ? "Describe what you're assessing" : "Describe more to add with AI"}
+        label={empty ? "What are you assessing?" : "Add more with AI"}
         placeholder={
-          empty ? "e.g. 230 mm clay brick wall, 10 m², on a 150 mm RCC slab of 20 m²" : "Add more with AI: e.g. 150 mm RCC roof slab, 20 m²"
+          empty ? "e.g. 230 mm brick wall, 10 m², on a 150 mm RCC slab, 20 m²" : "Add more: e.g. 150 mm RCC roof slab, 20 m²"
         }
         submitLabel={empty ? "Draft the inventory" : "Draft"}
         value={text}
@@ -173,7 +173,7 @@ export function ProjectAi({ project, update }: { project: Project; update: Updat
         />
       )}
       {draft && !draft.inScope && (
-        <p className="text-sm text-warning">{draft.reason || "That isn't a construction item this tool covers."}</p>
+        <p className="text-sm text-warning">{draft.reason || "This tool covers construction items only."}</p>
       )}
       {error && <p className="text-sm text-destructive">{error}</p>}
     </section>

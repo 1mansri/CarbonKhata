@@ -9,7 +9,7 @@ export function ValidationPanel() {
 
   return (
     <section className="space-y-4">
-      <h2 className="condensed text-sm font-semibold">Validation against a published Indian study</h2>
+      <h2 className="text-heading font-semibold">Validation against a published Indian study</h2>
       {VALIDATION_CASES.map((c) => {
         const result = calculateProject(createProject(c.build()));
         return (

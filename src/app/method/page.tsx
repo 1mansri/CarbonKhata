@@ -25,7 +25,7 @@ export default async function MethodPage() {
   return (
     <div className="flex max-w-4xl flex-col gap-14">
       <header className="space-y-2">
-        <h1 className="display text-3xl font-semibold">Method</h1>
+        <h1 className="display text-title font-semibold">Method</h1>
         <p className="max-w-2xl text-muted-foreground">
           ISO 14040/14044 with the EN 15804+A2 module structure. One impact category: climate change, GWP100, in kg
           CO₂e. Every number is linear and shown with its working.
@@ -33,15 +33,15 @@ export default async function MethodPage() {
       </header>
 
       <section className="space-y-4">
-        <h2 className="condensed text-sm font-semibold">How each module is calculated</h2>
+        <h2 className="text-heading font-semibold">How each module is calculated</h2>
         <ul className="divide-y divide-border rounded-lg border border-border bg-card">
           {FORMULAS.map(({ m, f }) => (
-            <li key={m} className="grid grid-cols-[5rem_minmax(0,1fr)] items-baseline gap-4 px-4 py-3">
-              <span className="flex items-center gap-2 font-medium">
+            <li key={m} className="grid grid-cols-[4.5rem_minmax(0,1fr)] items-baseline gap-3 px-4 py-3 sm:grid-cols-[5.5rem_minmax(0,1fr)] sm:gap-4">
+              <span className="flex items-center gap-2 font-mono text-xs font-medium">
                 <span aria-hidden className="size-2.5 rounded-[2px]" style={{ backgroundColor: MODULE_META[m].color }} />
                 {MODULE_META[m].label}
               </span>
-              <span className="text-sm">{f}</span>
+              <span className="font-mono text-xs leading-relaxed break-words">{f}</span>
             </li>
           ))}
         </ul>
@@ -54,12 +54,12 @@ export default async function MethodPage() {
       <ValidationPanel />
 
       <section className="space-y-4">
-        <h2 className="condensed text-sm font-semibold">Sources and licences</h2>
+        <h2 className="text-heading font-semibold">Sources and licences</h2>
         <ol className="space-y-3">
           {curated.map((s) => (
             <li key={s.id} className="rounded-lg border border-border bg-card px-4 py-3 text-sm">
               <p>{s.citation}</p>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="mt-1.5 font-mono text-2xs text-muted-foreground">
                 <a href={s.url} target="_blank" rel="noreferrer" className="break-all underline underline-offset-2 hover:text-primary">
                   {s.url}
                 </a>
@@ -72,7 +72,7 @@ export default async function MethodPage() {
 
       {live.length > 0 && (
         <section className="space-y-4">
-          <h2 className="condensed text-sm font-semibold">Live data feeds</h2>
+          <h2 className="text-heading font-semibold">Live data feeds</h2>
           <div className="flex flex-col gap-4">
             {live.map((source) => (
               <SourceCard key={source.id} source={source} />
@@ -82,7 +82,7 @@ export default async function MethodPage() {
       )}
 
       <section className="space-y-3">
-        <h2 className="condensed text-sm font-semibold">What this tool does not do</h2>
+        <h2 className="text-heading font-semibold">What this tool does not do</h2>
         <ul className="list-disc space-y-1.5 pl-5 text-sm text-muted-foreground">
           <li>Impact categories other than climate change. Open Indian background data for them doesn&apos;t exist.</li>
           <li>The use stage (B1–B7): operational energy and maintenance.</li>
