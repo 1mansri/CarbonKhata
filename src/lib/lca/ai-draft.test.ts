@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { buildDraftRequest, parseDraft, vocabulary } from "@/lib/lca/ai-draft";
+import { buildDraftRequest, parseContext, parseDraft, vocabulary } from "@/lib/lca/ai-draft";
 import { ASSEMBLIES } from "@/data/lca/assemblies";
 import { MATERIALS } from "@/data/lca/materials";
 
@@ -76,6 +76,33 @@ describe("AI inventory draft", () => {
     );
     assert.equal(draft.inScope, false);
     assert.equal(draft.assemblies.length + draft.others.length, 0);
+  });
+
+  it("sends a bare description when the project is empty", () => {
+    const body = buildDraftRequest("brick wall", ASSEMBLIES, MATERIALS, "m", { projectName: "Untitled", components: [] });
+    assert.equal(body.messages[1].content, "brick wall");
+  });
+
+  it("lists what the project already holds so only new components are drafted", () => {
+    const body = buildDraftRequest("150 mm RCC slab, 20 m²", ASSEMBLIES, MATERIALS, "m", {
+      projectName: "Brick wall",
+      components: ["Clay brickwork in cement mortar 1:6"],
+    });
+    assert.equal(
+      body.messages[1].content,
+      'PROJECT SO FAR "Brick wall", already counted: Clay brickwork in cement mortar 1:6.\n\nNEW REQUEST: 150 mm RCC slab, 20 m²\n\n' +
+        "Draft only the new request; name the whole project.",
+    );
+  });
+
+  it("caps and cleans the project context a browser sends", () => {
+    const many = Array.from({ length: 50 }, (_, i) => `Component ${i}`);
+    const ctx = parseContext({ projectName: "  Hostel  ", components: [...many, "Component 1", 7, " ", "x".repeat(200)] });
+    assert.equal(ctx?.projectName, "Hostel");
+    assert.equal(ctx?.components.length, 20);
+    assert.equal(new Set(ctx?.components).size, 20);
+    assert.equal(parseContext({ projectName: "Empty", components: [] }), undefined);
+    assert.equal(parseContext("nope"), undefined);
   });
 
   it("rejects replies that aren't JSON or lack the shape", () => {

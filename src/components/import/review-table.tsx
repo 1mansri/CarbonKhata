@@ -31,6 +31,24 @@ export function isUsable(l: ReviewLine): boolean {
   return !!m && l.quantity != null && l.quantity > 0 && !!l.unit && compatibleUnits(m).includes(l.unit.unit);
 }
 
+/** Ledger lines from the reviewed rows; with `ai`, untouched quantities keep their AI mark. */
+export function toInventoryItems(lines: ReviewLine[], ai = false): InventoryItem[] {
+  return lines.filter(isUsable).map((l) => {
+    const material = getMaterial(l.materialId)!;
+    return {
+      id: newId(),
+      label: l.text || material.name,
+      material,
+      quantity: l.quantity! * l.unit!.factor,
+      unit: l.unit!.unit,
+      ...(ai && !l.manual ? { aiBasis: l.basis ?? "" } : {}),
+    };
+  });
+}
+
+/** A blank row for a component the reviewer adds by hand. */
+export const MANUAL_LINE: ReviewLine = { text: "", quantity: null, unit: null, rawUnit: "", materialId: "", manual: true };
+
 /**
  * The review step shared by BoQ import and AI drafting: every row gets a
  * library material (or is skipped) before it reaches the ledger. With
@@ -160,17 +178,7 @@ export function AddToProject({
   const usable = lines.filter(isUsable);
 
   function add() {
-    const items: InventoryItem[] = usable.map((l) => {
-      const material = getMaterial(l.materialId)!;
-      return {
-        id: newId(),
-        label: l.text || material.name,
-        material,
-        quantity: l.quantity! * l.unit!.factor,
-        unit: l.unit!.unit,
-        ...(ai && !l.manual ? { aiBasis: l.basis ?? "" } : {}),
-      };
-    });
+    const items = toInventoryItems(lines, ai);
     const base =
       target === "new"
         ? createProject({ name: newName, ...(scope ? { scope: { ...createProject().scope, ...scope } } : {}) })

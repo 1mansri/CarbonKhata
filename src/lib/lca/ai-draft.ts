@@ -18,7 +18,23 @@ import { MATERIAL_UNITS, isUnit } from "@/lib/lca/units";
  * Pure functions only (no fetch, no React) so the contract is unit-tested.
  */
 
-export const DRAFT_MAX_CHARS = 300;
+/** Room for a spoken description, which runs longer than a typed one-liner. */
+export const DRAFT_MAX_CHARS = 600;
+
+/** Used when the model gives no title; never applied as an automatic rename. */
+export const DRAFT_FALLBACK_NAME = "AI-drafted project";
+
+/**
+ * What an open project already contains, so a description made on its
+ * page adds to it: the model drafts only the new components and names the
+ * whole project. Kept short (names only, no quantities) to save tokens.
+ */
+export interface DraftContext {
+  projectName: string;
+  components: string[];
+}
+
+const CONTEXT_MAX_COMPONENTS = 20;
 
 export interface DraftAssembly {
   assemblyId: string;
@@ -46,6 +62,10 @@ export interface Draft {
   others: DraftOther[];
 }
 
+const isObj = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null;
+const text = (v: unknown, max = 400) => (typeof v === "string" ? v.trim().slice(0, max) : "");
+const positive = (v: unknown) => (typeof v === "number" && Number.isFinite(v) && v > 0 ? v : null);
+
 /** Library names the model may use for "other materials": generic and mean values, no brands. */
 export function vocabulary(materials: MaterialFactor[]): string[] {
   return [...new Set(materials.filter((m) => !m.source.sourceId.startsWith("epd-")).map((m) => m.name))];
@@ -60,7 +80,30 @@ Rules:
 - Only for materials no assembly covers (e.g. reinforcement steel in RCC, tiles, glass, paint), add OTHER materials using a name from the material list, a quantity, a unit and a basis.
 - basis: the geometry or rule of thumb behind the quantity in one short line, so an engineer can check it.
 - assumptions: one or two sentences (dimensions, which assembly and why).
+- projectName: a short title (at most 8 words) for what is being assessed, e.g. "230 mm brick wall, 10 m²".
+- The message may start with PROJECT SO FAR. Those components are already counted: return only what the NEW REQUEST adds, with its own size, and never an existing component again unless the request asks for more of it. But projectName and functionalUnit cover the whole project, old and new together (e.g. "Brick boundary wall with RCC slab").
 - Never state emission factors or carbon values.`;
+
+/**
+ * Checks the context a browser sent: strings only, capped in count and
+ * length, so a large or odd project can't blow the token budget.
+ */
+export function parseContext(v: unknown): DraftContext | undefined {
+  if (!isObj(v) || !Array.isArray(v.components)) return undefined;
+  const components = [...new Set(v.components.map((c) => text(c, 80)).filter(Boolean))].slice(0, CONTEXT_MAX_COMPONENTS);
+  if (components.length === 0) return undefined;
+  return { projectName: text(v.projectName, 120), components };
+}
+
+/** The user turn: the description, preceded by the project's contents when there are any. */
+export function userMessage(description: string, context?: DraftContext): string {
+  if (!context || context.components.length === 0) return description;
+  const name = context.projectName ? ` "${context.projectName}"` : "";
+  return (
+    `PROJECT SO FAR${name}, already counted: ${context.components.join("; ")}.\n\nNEW REQUEST: ${description}\n\n` +
+    "Draft only the new request; name the whole project."
+  );
+}
 
 /** Groq chat-completions request body (OpenAI-compatible, strict JSON schema). */
 export function buildDraftRequest(
@@ -68,6 +111,7 @@ export function buildDraftRequest(
   assemblies: Assembly[],
   materials: MaterialFactor[],
   model: string,
+  context?: DraftContext,
 ) {
   const str = { type: "string" };
   const schema = {
@@ -120,7 +164,7 @@ export function buildDraftRequest(
         role: "system",
         content: `${SYSTEM}\n\nAssemblies (id | what it is | unit):\n${assemblyList}\n\nMaterial names for "others":\n${vocabulary(materials).join("; ")}`,
       },
-      { role: "user", content: description },
+      { role: "user", content: userMessage(description, context) },
     ],
     response_format: {
       type: "json_schema",
@@ -128,10 +172,6 @@ export function buildDraftRequest(
     },
   };
 }
-
-const isObj = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null;
-const text = (v: unknown, max = 400) => (typeof v === "string" ? v.trim().slice(0, max) : "");
-const positive = (v: unknown) => (typeof v === "number" && Number.isFinite(v) && v > 0 ? v : null);
 
 /**
  * Checks a model reply. Strict mode should already guarantee the shape;
@@ -165,7 +205,7 @@ export function parseDraft(content: string, assemblies: Assembly[]): Draft {
   return {
     inScope: data.inScope,
     reason: text(data.reason),
-    projectName: text(data.projectName, 120) || "AI-drafted project",
+    projectName: text(data.projectName, 120) || DRAFT_FALLBACK_NAME,
     functionalUnit: text(data.functionalUnit, 160),
     assumptions: text(data.assumptions, 600),
     assemblies: data.inScope ? draftAssemblies : [],

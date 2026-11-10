@@ -35,7 +35,8 @@ export function Ledger({
   result: ProjectResult;
   update: Update;
 }) {
-  const [picking, setPicking] = useState(project.items.length === 0);
+  // An empty project leads with the AI description box; the picker opens on demand.
+  const [picking, setPicking] = useState(false);
   const [open, setOpen] = useState<string | null>(null);
 
   const setItem = (id: string, change: (item: InventoryItem) => InventoryItem) =>

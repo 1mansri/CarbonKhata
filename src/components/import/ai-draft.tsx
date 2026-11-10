@@ -1,26 +1,26 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { Loader2, Plus, RotateCcw, Sparkles } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Plus, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { AddToProject, ReviewTable, isUsable, type ReviewLine } from "@/components/import/review-table";
+import { DescribeBox } from "@/components/import/describe-box";
+import { AddToProject, MANUAL_LINE, ReviewTable, isUsable, type ReviewLine } from "@/components/import/review-table";
 import { expandAssembly, getAssembly } from "@/data/lca/assemblies";
 import { MATERIALS } from "@/data/lca/materials";
-import { DRAFT_MAX_CHARS, type Draft } from "@/lib/lca/ai-draft";
+import type { Draft, DraftContext } from "@/lib/lca/ai-draft";
 import { matchBoq } from "@/lib/lca/boq";
 import { fmt } from "@/lib/lca/format";
 import { unitLabel } from "@/lib/lca/units";
 
 /** Construction items studied often enough to make good starting points. */
-const EXAMPLES = [
+export const EXAMPLES = [
   "230 mm clay brick wall, 10 m²",
   "200 mm AAC block wall, 10 m²",
   "1 m³ of M25 concrete",
   "150 mm RCC roof slab, 20 m²",
 ];
 
-type Result = Draft & { model: string };
+export type DraftResult = Draft & { model: string; description: string };
 
 /**
  * Assemblies expand into materials with their cited coefficients (the AI
@@ -56,35 +56,122 @@ function toReviewLines(draft: Draft): ReviewLine[] {
   return [...fromAssemblies, ...others];
 }
 
-export function AiDraft({ initial = "" }: { initial?: string }) {
-  const [text, setText] = useState(initial);
+/** Sends a description (and, on a project page, what the project holds) to the drafting route. */
+export function useAiDraft() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [draft, setDraft] = useState<Result | null>(null);
+  const [draft, setDraft] = useState<DraftResult | null>(null);
   const [lines, setLines] = useState<ReviewLine[]>([]);
-  const ran = useRef(false);
 
-  async function run(description: string) {
+  const run = useCallback(async (description: string, project?: DraftContext): Promise<DraftResult | null> => {
     const d = description.trim();
-    if (!d) return;
+    if (!d) return null;
     setBusy(true);
     setError(null);
     try {
       const res = await fetch("/api/ai/draft", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ description: d }),
+        body: JSON.stringify({ description: d, project }),
       });
-      const body = (await res.json()) as Result & { error?: string };
+      const body = (await res.json()) as Draft & { model: string; error?: string };
       if (!res.ok) throw new Error(body.error ?? "Drafting failed.");
-      setDraft(body);
-      setLines(toReviewLines(body));
+      const result = { ...body, description: d };
+      setDraft(result);
+      setLines(toReviewLines(result));
+      return result;
     } catch (e) {
       setError(e instanceof Error ? e.message : "Drafting failed.");
+      return null;
     } finally {
       setBusy(false);
     }
-  }
+  }, []);
+
+  const reset = useCallback(() => {
+    setDraft(null);
+    setLines([]);
+    setError(null);
+  }, []);
+
+  return { busy, error, draft, lines, setLines, run, reset };
+}
+
+/** What the AI understood, the editable lines, and room to add what it missed. */
+export function DraftReview({
+  draft,
+  lines,
+  onChange,
+  actions,
+  children,
+}: {
+  draft: DraftResult;
+  lines: ReviewLine[];
+  onChange: (lines: ReviewLine[]) => void;
+  /** Top-right, e.g. "Start over". */
+  actions?: React.ReactNode;
+  /** Under the table: where the lines go. */
+  children: React.ReactNode;
+}) {
+  const unmatched = lines.filter((l) => !l.materialId).length;
+  return (
+    <div className="space-y-5">
+      <div className="flex flex-wrap items-start gap-3">
+        <div className="mr-auto max-w-2xl space-y-1">
+          <p className="font-medium">{draft.projectName}</p>
+          <p className="text-sm text-muted-foreground">
+            Per {draft.functionalUnit || "the stated item"}. {draft.assumptions}
+          </p>
+          <p className="text-xs text-warning">
+            Sizes and any extra materials are AI estimates ({draft.model}): check each line. Materials per unit of
+            masonry and concrete come from CPWD analyses; carbon factors only from the cited library.
+            {unmatched > 0 && ` ${unmatched} component${unmatched === 1 ? " has" : "s have"} no library match yet.`}
+          </p>
+        </div>
+        {actions}
+      </div>
+
+      <ReviewTable lines={lines} onChange={onChange} itemHeading="Component" editable />
+
+      <div className="flex flex-wrap items-center gap-3">
+        <Button variant="outline" className="mr-auto" onClick={() => onChange([...lines, { ...MANUAL_LINE }])}>
+          <Plus />
+          Add a missing component
+        </Button>
+        <span className="text-sm text-muted-foreground">
+          {lines.filter(isUsable).length} of {lines.length} ready
+        </span>
+      </div>
+
+      {children}
+    </div>
+  );
+}
+
+/** Example chips that draft straight away. */
+export function ExampleChips({ disabled, onPick }: { disabled: boolean; onPick: (text: string) => void }) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {EXAMPLES.map((ex) => (
+        <button
+          key={ex}
+          type="button"
+          disabled={disabled}
+          onClick={() => onPick(ex)}
+          className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground disabled:opacity-50"
+        >
+          {ex}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** The new-project flow on /import: describe, review, then add to a new or existing project. */
+export function AiDraft({ initial = "" }: { initial?: string }) {
+  const [text, setText] = useState(initial);
+  const { busy, error, draft, lines, setLines, run, reset } = useAiDraft();
+  const ran = useRef(false);
 
   // Arriving from the home page with a description: draft it straight away.
   useEffect(() => {
@@ -92,101 +179,52 @@ export function AiDraft({ initial = "" }: { initial?: string }) {
       ran.current = true;
       void run(initial);
     }
-  }, [initial]);
+  }, [initial, run]);
 
   if (draft?.inScope) {
-    const unmatched = lines.filter((l) => !l.materialId).length;
     return (
-      <div className="space-y-5">
-        <div className="flex flex-wrap items-start gap-3">
-          <div className="mr-auto max-w-2xl space-y-1">
-            <p className="font-medium">{draft.projectName}</p>
-            <p className="text-sm text-muted-foreground">
-              Per {draft.functionalUnit || "the stated item"}. {draft.assumptions}
-            </p>
-            <p className="text-xs text-warning">
-              Sizes and any extra materials are AI estimates ({draft.model}): check each line. Materials per unit of
-              masonry and concrete come from CPWD analyses; carbon factors only from the cited library.
-              {unmatched > 0 && ` ${unmatched} component${unmatched === 1 ? " has" : "s have"} no library match yet.`}
-            </p>
-          </div>
-          <Button variant="ghost" onClick={() => setDraft(null)}>
+      <DraftReview
+        draft={draft}
+        lines={lines}
+        onChange={setLines}
+        actions={
+          <Button variant="ghost" onClick={reset}>
             <RotateCcw />
             Start over
           </Button>
-        </div>
-
-        <ReviewTable lines={lines} onChange={setLines} itemHeading="Component" editable />
-
-        <div className="flex flex-wrap items-center gap-3">
-          <Button
-            variant="outline"
-            className="mr-auto"
-            onClick={() =>
-              setLines((cur) => [...cur, { text: "", quantity: null, unit: null, rawUnit: "", materialId: "", manual: true }])
-            }
-          >
-            <Plus />
-            Add a missing component
-          </Button>
-          <span className="text-sm text-muted-foreground">
-            {lines.filter(isUsable).length} of {lines.length} ready
-          </span>
-        </div>
-
+        }
+      >
         <AddToProject
           lines={lines}
           newName={draft.projectName}
           ai
           scope={{
-            goal: `Embodied carbon of: ${text.trim()}`,
+            goal: `Embodied carbon of: ${draft.description}`,
             functionalUnit: draft.functionalUnit,
-            assumptions: `Inventory drafted by AI (${draft.model}) from the description "${text.trim()}" and reviewed by the user. ${draft.assumptions}`,
+            assumptions: `Inventory drafted by AI (${draft.model}) from the description "${draft.description}" and reviewed by the user. ${draft.assumptions}`,
           }}
         />
-      </div>
+      </DraftReview>
     );
   }
 
   return (
     <div className="space-y-3">
-      <form
-        className="flex flex-col gap-2 sm:flex-row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          void run(text);
+      <DescribeBox
+        label="What do you want to assess?"
+        placeholder="e.g. 230 mm clay brick wall, 10 m². Type it or tap Speak."
+        value={text}
+        onChange={setText}
+        onSubmit={(t) => void run(t)}
+        busy={busy}
+      />
+      <ExampleChips
+        disabled={busy}
+        onPick={(ex) => {
+          setText(ex);
+          void run(ex);
         }}
-      >
-        <Input
-          aria-label="What do you want to assess?"
-          placeholder="e.g. 230 mm clay brick wall, 10 m²"
-          value={text}
-          maxLength={DRAFT_MAX_CHARS}
-          onChange={(e) => setText(e.target.value)}
-          disabled={busy}
-          className="h-10"
-        />
-        <Button type="submit" disabled={busy || !text.trim()} className="h-10 shrink-0">
-          {busy ? <Loader2 className="animate-spin" /> : <Sparkles />}
-          {busy ? "Drafting…" : "Draft the inventory"}
-        </Button>
-      </form>
-      <div className="flex flex-wrap gap-2">
-        {EXAMPLES.map((ex) => (
-          <button
-            key={ex}
-            type="button"
-            disabled={busy}
-            onClick={() => {
-              setText(ex);
-              void run(ex);
-            }}
-            className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground disabled:opacity-50"
-          >
-            {ex}
-          </button>
-        ))}
-      </div>
+      />
       {draft && !draft.inScope && (
         <p className="text-sm text-warning">{draft.reason || "That isn't a construction item this tool covers."}</p>
       )}

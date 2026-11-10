@@ -1,15 +1,16 @@
 import { NextResponse } from "next/server";
 import { ASSEMBLIES } from "@/data/lca/assemblies";
 import { MATERIALS } from "@/data/lca/materials";
-import { DRAFT_MAX_CHARS, buildDraftRequest, parseDraft } from "@/lib/lca/ai-draft";
+import { DRAFT_MAX_CHARS, buildDraftRequest, parseContext, parseDraft, type DraftContext } from "@/lib/lca/ai-draft";
 
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 // Groq's featured production model with strict JSON-schema output.
 const DEFAULT_MODEL = "openai/gpt-oss-120b";
 
 /**
- * Drafts an inventory from a one-line description. The Groq key stays on
- * the server; the browser only gets the validated draft.
+ * Drafts an inventory from a description, optionally for an open project
+ * (its name and component names, so only new components are drafted). The
+ * Groq key stays on the server; the browser only gets the validated draft.
  */
 export async function POST(request: Request) {
   const apiKey = process.env.GROQ_API_KEY;
@@ -21,9 +22,11 @@ export async function POST(request: Request) {
   }
 
   let description = "";
+  let context: DraftContext | undefined;
   try {
-    const body = (await request.json()) as { description?: unknown };
+    const body = (await request.json()) as { description?: unknown; project?: unknown };
     description = typeof body.description === "string" ? body.description.trim() : "";
+    context = parseContext(body.project);
   } catch {
     // fall through to the empty-description error
   }
@@ -40,7 +43,7 @@ export async function POST(request: Request) {
     res = await fetch(GROQ_URL, {
       method: "POST",
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify(buildDraftRequest(description, ASSEMBLIES, MATERIALS, model)),
+      body: JSON.stringify(buildDraftRequest(description, ASSEMBLIES, MATERIALS, model, context)),
       signal: AbortSignal.timeout(45_000),
     });
   } catch {

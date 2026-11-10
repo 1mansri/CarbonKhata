@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useProjectEditor } from "@/components/project/use-project-editor";
 import { Ledger } from "@/components/project/ledger";
+import { ProjectAi } from "@/components/project/project-ai";
 import { SiteEnergy } from "@/components/project/site-energy";
 import { LiveTotal } from "@/components/project/live-total";
 import { ResultsView } from "@/components/project/results-view";
@@ -124,7 +125,10 @@ export function ProjectWorkspace({ id }: { id: string }) {
           <Tabs.Indicator className="absolute bottom-0 left-0 h-0.5 w-(--active-tab-width) translate-x-(--active-tab-left) rounded-full bg-brand-accent transition-[translate,width] duration-200 ease-(--ease-in-out) motion-reduce:transition-none" />
         </Tabs.List>
 
-        <Tabs.Panel value="ledger" className="outline-none">
+        {/* Kept mounted so an AI draft under review survives a look at another tab. */}
+        <Tabs.Panel value="ledger" keepMounted className="flex flex-col gap-6 outline-none data-hidden:hidden">
+          {/* Full width so the review table has room before its lines join the ledger. */}
+          <ProjectAi project={project} update={update} />
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
             <div className="min-w-0 space-y-8">
               <Ledger project={project} result={result} update={update} />
