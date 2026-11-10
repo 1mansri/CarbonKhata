@@ -8,7 +8,9 @@ import type { Project } from "@/lib/lca/types";
  * move between machines as exported files. The store is a tiny external
  * store over localStorage so every component reads one consistent snapshot.
  */
-const KEY = "carbonkhata:projects:v1";
+const KEY = "cradle:projects:v1";
+/** Key used before the rename to Cradle; read once so saved projects carry over. */
+const LEGACY_KEY = "carbonkhata:projects:v1";
 
 type ProjectMap = Record<string, Project>;
 
@@ -18,7 +20,14 @@ const listeners = new Set<() => void>();
 function read(): ProjectMap {
   if (cache) return cache;
   try {
-    cache = JSON.parse(localStorage.getItem(KEY) ?? "{}") as ProjectMap;
+    let raw = localStorage.getItem(KEY);
+    const legacy = raw === null ? localStorage.getItem(LEGACY_KEY) : null;
+    if (legacy !== null) {
+      localStorage.setItem(KEY, legacy);
+      localStorage.removeItem(LEGACY_KEY);
+      raw = legacy;
+    }
+    cache = JSON.parse(raw ?? "{}") as ProjectMap;
   } catch {
     cache = {};
   }

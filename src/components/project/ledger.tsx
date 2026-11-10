@@ -24,7 +24,7 @@ type Update = (change: (p: Project) => Project) => void;
  * screen's, because the total sits beside it on wide screens.
  * - narrow: two lines per entry (material + delete, then quantity + total);
  * - @xl: one ledger line;
- * - @3xl: plus the running balance, like a khata's last column.
+ * - @3xl: plus the running balance, like a ledger's last column.
  */
 const ROW_GRID =
   "grid grid-cols-[1.25rem_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 px-3 @xl:grid-cols-[1.5rem_minmax(0,1fr)_10.5rem_6rem_2rem] @3xl:grid-cols-[1.5rem_minmax(0,1fr)_11rem_6.5rem_6.5rem_2rem]";

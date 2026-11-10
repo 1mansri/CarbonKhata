@@ -1,0 +1,83 @@
+/*
+ * The anatomy kit's light tokens, remapped to Cradle's paper and inks.
+ * Tones run from sage (lo) to deep warm grey (hi); burgundy is the one lit
+ * accent, the needle. Shades step about 3% apart, as the kit advises.
+ */
+.iso.ck-iso[data-theme="light"] {
+  --anatomy-page: var(--background);
+  --anatomy-card: var(--card);
+  --anatomy-text: var(--muted-foreground);
+  --anatomy-strong: var(--foreground);
+  --anatomy-muted: var(--muted-foreground);
+  --anatomy-paper: var(--card);
+  --anatomy-face: #fbf5ec;
+  --anatomy-top: #fbf5ec;
+  --anatomy-shade-0: #dccab0;
+  --anatomy-shade-1: #e3d4bd;
+  --anatomy-shade-2: #eadfcb;
+  --anatomy-shade-3: #f1e7d8;
+  --anatomy-lit-top: #fffaf3;
+  --anatomy-lit-shade: #efe3d1;
+  --anatomy-hi: #4a463c;
+  --anatomy-mid: #85826f;
+  --anatomy-lo: #a5a79b;
+  --anatomy-faint: #cfc4ad;
+  --anatomy-lit: var(--foreground);
+  --anatomy-halo: #7d6f55;
+  --anatomy-halo-opacity: 0.3;
+  --anatomy-dot: #4a463c;
+  --anatomy-mono: var(--font-mono);
+  --anatomy-weight: 0.6px;
+}
+
+/* The card: the site's own radius and border instead of the kit's square frame. */
+.ck-iso .iso-figure {
+  margin: 0;
+}
+.ck-iso .iso-plate {
+  border-radius: var(--radius-lg);
+  box-shadow: 0 0 0 1px var(--border);
+  padding: 46px 18px 44px;
+}
+.ck-iso .iso-plate-corners {
+  inset: 16px 18px;
+}
+.ck-iso .iso-legend {
+  color: var(--muted-foreground);
+  font-size: 12.5px;
+}
+
+.ck-scale {
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.ck-scale:focus-visible {
+  outline: 1px solid var(--anatomy-muted);
+  outline-offset: 6px;
+}
+
+/* The needle: the one lit accent, a little heavier than the rest. */
+.ck-needle {
+  stroke-width: 1.2;
+}
+
+/* Halos under parts lifted off a surface: softer than the base's. */
+.ck-soft {
+  filter: blur(4px);
+  opacity: 0.22;
+}
+
+@media (max-width: 560px) {
+  /* Phones: let the scale fill the card. */
+  .ck-iso .iso-plate {
+    overflow: hidden;
+    padding: 44px 10px 64px;
+  }
+  .ck-iso .iso-plate .ck-scale .iso-svg {
+    width: 112%;
+    margin: -3% -6% -2%;
+  }
+}

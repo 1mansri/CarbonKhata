@@ -1,3 +1,4 @@
+import { BRAND } from "@/lib/brand";
 import { VALIDATION_CASES } from "@/data/lca/validation";
 import { calculateProject } from "@/lib/lca/calculate";
 import { fmt } from "@/lib/lca/format";
@@ -24,7 +25,7 @@ export function ValidationPanel() {
                   <tr className="border-b border-border text-left text-xs text-muted-foreground">
                     <th className="px-4 py-2 font-medium">Stage</th>
                     <th className="px-4 py-2 text-right font-medium">Published, kg CO₂e</th>
-                    <th className="px-4 py-2 text-right font-medium">CarbonKhata</th>
+                    <th className="px-4 py-2 text-right font-medium">{BRAND.name}</th>
                     <th className="px-4 py-2 text-right font-medium">Difference</th>
                   </tr>
                 </thead>

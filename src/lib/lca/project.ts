@@ -54,7 +54,7 @@ export function parseProjectFile(text: string): Project {
     throw new Error("This file isn't valid JSON.");
   }
   if (!isObj(data) || data.schemaVersion !== 1) {
-    throw new Error("This isn't a CarbonKhata project file (schemaVersion 1).");
+    throw new Error("This isn't a Cradle project file (schemaVersion 1).");
   }
   if (typeof data.name !== "string" || !isObj(data.scope) || !Array.isArray(data.items)) {
     throw new Error("The project file is missing its name, scope or inventory.");

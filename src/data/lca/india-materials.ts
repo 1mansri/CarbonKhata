@@ -892,7 +892,7 @@ export const INDIA_SOURCES: Omit<Source, "accessed">[] = [
   {
     "id": "india-cement-epds",
     "short": "Indian cement EPDs",
-    "citation": "Indian cement Environmental Product Declarations on the International EPD System (UltraTech EPD-IES-0005019, ACC EPD-IES-0031051 and PPC EPD, Ambuja EPD-IES-0031048 and PPC EPD, My Home, JSW). Mean and range computed by CarbonKhata.",
+    "citation": "Indian cement Environmental Product Declarations on the International EPD System (UltraTech EPD-IES-0005019, ACC EPD-IES-0031051 and PPC EPD, Ambuja EPD-IES-0031048 and PPC EPD, My Home, JSW). Mean and range computed by Cradle.",
     "url": "https://www.environdec.com/library",
     "license": "Values cited from public EPDs with registration numbers.",
     "bibtex": {

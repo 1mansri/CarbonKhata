@@ -1,4 +1,5 @@
 import { SteelRoutes } from "@/components/home/steel-routes";
+import { CarbonScaleFigure } from "@/components/figures/carbon-scale/figure";
 import { HomeDescribe } from "@/components/home/home-describe";
 import { ProjectList } from "@/components/home/project-list";
 import { Templates } from "@/components/home/templates";
@@ -27,11 +28,18 @@ export default function Home() {
             <HomeDescribe />
           </div>
         </div>
-        <SteelRoutes />
+        <CarbonScaleFigure />
       </section>
 
       <ProjectList />
       <Templates />
+      <section className="max-w-2xl space-y-4">
+        <div className="space-y-1">
+          <h2 className="text-heading font-semibold">Steel depends on how it&apos;s made</h2>
+          <p className="text-sm text-muted-foreground">The same tonne of steel, by production route.</p>
+        </div>
+        <SteelRoutes />
+      </section>
     </div>
   );
 }

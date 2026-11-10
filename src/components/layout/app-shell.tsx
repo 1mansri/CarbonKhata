@@ -3,7 +3,6 @@ import { NavLink } from "@/components/layout/nav-link";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { navLinks } from "@/components/layout/nav-links";
 import { LogoMark, Wordmark } from "@/components/layout/logo";
-import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
@@ -22,7 +21,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             ))}
           </nav>
           <div className="ml-auto flex items-center gap-1">
-            <ThemeToggle />
             <MobileNav />
           </div>
         </div>

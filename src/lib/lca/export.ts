@@ -177,7 +177,7 @@ export function downloadWorkbook(project: Project) {
 }
 
 export function downloadProjectFile(project: Project) {
-  downloadText(`${slug(project.name)}.carbonkhata.json`, JSON.stringify(project, null, 2), "application/json");
+  downloadText(`${slug(project.name)}.cradle.json`, JSON.stringify(project, null, 2), "application/json");
 }
 
 export function downloadBibtex(project: Project) {

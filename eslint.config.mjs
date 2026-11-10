@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vendored, unchanged upstream code (see its README); our figures don't use its useLoop/useEased.
+    "src/components/iso/**",
   ]),
 ]);
 

@@ -1,8 +1,8 @@
-# CarbonKhata
+# Cradle
 
 An open embodied-carbon calculator for Indian construction research (BTP project).
-*Khata* is the ledger Indian shops have kept by hand for generations: every
-entry written down, every balance traceable. This tool does that for carbon.
+The name comes from the life-cycle boundary every assessment starts from:
+cradle-to-gate (A1–A3), cradle-to-grave (A–C), and benefits beyond (D).
 
 It replaces the Excel sheet a research scholar builds by hand: enter a bill of
 materials, get cradle-to-gate (and optionally cradle-to-grave) GWP following
@@ -72,7 +72,7 @@ The engine reproduces a published Indian building study, Chaudhary & Akhtar
 quantities, rebuilt with the paper's own factors and units (per 1000 bricks,
 quintals, packs of 10/100, litres, metres).
 
-| Stage | Published (kg CO₂e) | CarbonKhata |
+| Stage | Published (kg CO₂e) | Cradle |
 |---|---|---|
 | A1–A3 material production | 899,412.37 | 899,412.37 (every line matches Table S4) |
 | A5 on-site construction | 12,075.01 | 12,074.60 (0.41 kg of welding is entered per cm, which the tool can't express) |

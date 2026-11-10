@@ -3,15 +3,19 @@
 @import "shadcn/tailwind.css";
 
 /*
- * Visual identity: the paper tools Indian engineering students grew up
- * with — the green-ruled graph sheet and drafting-ink drawing — made live.
- * Dark mode is a blueprint, the original "dark mode" of engineering.
+ * Visual identity: a ledger kept in burgundy ink on warm kraft paper, with
+ * sage for rules and margins. One theme only: the brand palette is
+ * cream #e8d2b5, burgundy #590907 and sage #a5a79b; every other token is
+ * a tint or shade of those three, checked for WCAG AA text contrast.
  *
- * Module colours (A1–A3 / A4 / A5 / C1–C4) are validated for colour-vision
- * deficiency on both surfaces with the dataviz palette validator; D is a
- * neutral hatch because it sits outside the reported total.
+ * Module colours (A1–A3 / A4 / A5 / C1–C4) are validated with the dataviz
+ * palette validator on the page and card surfaces, all pairs: CVD ΔE ≥ 10.2,
+ * normal-vision ΔE ≥ 16.4, every mark ≥ 3:1. D is a neutral hatch because it
+ * sits outside the reported total.
  */
 
+/* No dark theme: `dark:` classes in the UI kit are pinned to an attribute
+   nothing sets, so they never follow the OS setting. */
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 /* Mouse and trackpad only: touch fires false hovers on tap. */
 @custom-variant pointer-fine (@media (hover: hover) and (pointer: fine));
@@ -85,6 +89,7 @@
   --color-info-foreground: var(--info-foreground);
   --color-brand-accent: var(--brand-accent);
   --color-brand-accent-foreground: var(--brand-accent-foreground);
+  --color-sage: var(--sage);
   --color-module-a13: var(--module-a13);
   --color-module-a4: var(--module-a4);
   --color-module-a5: var(--module-a5);
@@ -103,143 +108,57 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* Graph sheet (light) */
+/* Kraft paper, burgundy ink, sage rules. */
 :root {
   color-scheme: light;
-  --background: #f7f8f3;
-  --foreground: #1b2a4e;
-  --card: #ffffff;
-  --card-foreground: #1b2a4e;
-  --popover: #ffffff;
-  --popover-foreground: #1b2a4e;
-  --primary: #1b2a4e;
-  --primary-foreground: #f7f8f3;
-  --secondary: #ebefe5;
-  --secondary-foreground: #1b2a4e;
-  --muted: #eef1e9;
-  --muted-foreground: #56627e;
-  --accent: #e8ede1;
-  --accent-foreground: #1b2a4e;
-  --destructive: #b42318;
-  --border: #d6dfcf;
-  --input: #c9d4c2;
-  --ring: #2f4fa8;
-  --success: #2e7d32;
-  --success-foreground: #f7f8f3;
-  --warning: #9a5b00;
-  --warning-foreground: #f7f8f3;
-  --info: #2f4fa8;
-  --info-foreground: #f7f8f3;
-  --brand-accent: #d8961a;
-  --brand-accent-foreground: #1b2a4e;
-  --module-a13: #2f4fa8;
-  --module-a4: #d8961a;
-  --module-a5: #009c8b;
-  --module-c: #b4492f;
-  --module-d: #7a849c;
-  --grid-minor: #e6ede0;
-  --grid-major: #cfdcc8;
+  --background: #e8d2b5;
+  --foreground: #590907;
+  --card: #f4e9da;
+  --card-foreground: #590907;
+  --popover: #f7efe4;
+  --popover-foreground: #590907;
+  --primary: #590907;
+  --primary-foreground: #f4e9da;
+  --secondary: #dccbb1;
+  --secondary-foreground: #590907;
+  --muted: #dfc7a8;
+  --muted-foreground: #4f5146;
+  --accent: #dfcdb3;
+  --accent-foreground: #590907;
+  --destructive: #a11d16;
+  --border: #c9bda5;
+  --input: #b9b29f;
+  --ring: #942126;
+  --success: #255a27;
+  --success-foreground: #f4e9da;
+  --warning: #7a4600;
+  --warning-foreground: #f4e9da;
+  --info: #5a3a8c;
+  --info-foreground: #f4e9da;
+  --brand-accent: #590907;
+  --brand-accent-foreground: #f4e9da;
+  --sage: #a5a79b;
+  --module-a13: #942126;
+  --module-a4: #996b00;
+  --module-a5: #00856e;
+  --module-c: #6c44a4;
+  --module-d: #6b6d62;
+  --grid-minor: #e4d6c1;
+  --grid-major: #d2c6ae;
   --chart-1: var(--module-a13);
   --chart-2: var(--module-a4);
   --chart-3: var(--module-a5);
   --chart-4: var(--module-c);
   --chart-5: var(--module-d);
   --radius: 0.5rem;
-  --sidebar: #f7f8f3;
-  --sidebar-foreground: #1b2a4e;
-  --sidebar-primary: #1b2a4e;
-  --sidebar-primary-foreground: #f7f8f3;
-  --sidebar-accent: #eef1e9;
-  --sidebar-accent-foreground: #1b2a4e;
-  --sidebar-border: #d6dfcf;
-  --sidebar-ring: #2f4fa8;
-}
-
-/* Blueprint (dark) — OS preference unless the reader chose light. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --background: #0f2240;
-    --foreground: #e8eef8;
-    --card: #132a4c;
-    --card-foreground: #e8eef8;
-    --popover: #173157;
-    --popover-foreground: #e8eef8;
-    --primary: #e8eef8;
-    --primary-foreground: #0f2240;
-    --secondary: #1a3459;
-    --secondary-foreground: #e8eef8;
-    --muted: #172f52;
-    --muted-foreground: #a6b6d2;
-    --accent: #1c3760;
-    --accent-foreground: #e8eef8;
-    --destructive: #f2786d;
-    --border: rgb(166 190 235 / 0.18);
-    --input: rgb(166 190 235 / 0.26);
-    --ring: #8ea6f0;
-    --success: #6cc070;
-    --warning: #e9a43a;
-    --info: #8ea6f0;
-    --brand-accent: #e0a834;
-    --brand-accent-foreground: #0f2240;
-    --module-a13: #5674d8;
-    --module-a4: #c2860f;
-    --module-a5: #00a08f;
-    --module-c: #c95a3f;
-    --module-d: #8a9abb;
-    --grid-minor: rgb(160 190 240 / 0.07);
-    --grid-major: rgb(160 190 240 / 0.15);
-    --sidebar: #0f2240;
-    --sidebar-foreground: #e8eef8;
-    --sidebar-primary: #e8eef8;
-    --sidebar-primary-foreground: #0f2240;
-    --sidebar-accent: #172f52;
-    --sidebar-accent-foreground: #e8eef8;
-    --sidebar-border: rgb(166 190 235 / 0.18);
-    --sidebar-ring: #8ea6f0;
-  }
-}
-
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --background: #0f2240;
-  --foreground: #e8eef8;
-  --card: #132a4c;
-  --card-foreground: #e8eef8;
-  --popover: #173157;
-  --popover-foreground: #e8eef8;
-  --primary: #e8eef8;
-  --primary-foreground: #0f2240;
-  --secondary: #1a3459;
-  --secondary-foreground: #e8eef8;
-  --muted: #172f52;
-  --muted-foreground: #a6b6d2;
-  --accent: #1c3760;
-  --accent-foreground: #e8eef8;
-  --destructive: #f2786d;
-  --border: rgb(166 190 235 / 0.18);
-  --input: rgb(166 190 235 / 0.26);
-  --ring: #8ea6f0;
-  --success: #6cc070;
-  --warning: #e9a43a;
-  --info: #8ea6f0;
-  --brand-accent: #e0a834;
-  --brand-accent-foreground: #0f2240;
-  --module-a13: #5674d8;
-  --module-a4: #c2860f;
-  --module-a5: #00a08f;
-  --module-c: #c95a3f;
-  --module-d: #8a9abb;
-  --grid-minor: rgb(160 190 240 / 0.07);
-  --grid-major: rgb(160 190 240 / 0.15);
-  --sidebar: #0f2240;
-  --sidebar-foreground: #e8eef8;
-  --sidebar-primary: #e8eef8;
-  --sidebar-primary-foreground: #0f2240;
-  --sidebar-accent: #172f52;
-  --sidebar-accent-foreground: #e8eef8;
-  --sidebar-border: rgb(166 190 235 / 0.18);
-  --sidebar-ring: #8ea6f0;
+  --sidebar: #e8d2b5;
+  --sidebar-foreground: #590907;
+  --sidebar-primary: #590907;
+  --sidebar-primary-foreground: #f4e9da;
+  --sidebar-accent: #dfc7a8;
+  --sidebar-accent-foreground: #590907;
+  --sidebar-border: #c9bda5;
+  --sidebar-ring: #942126;
 }
 
 @layer base {
@@ -272,7 +191,7 @@
     text-wrap: pretty;
   }
   ::selection {
-    background-color: color-mix(in oklab, var(--brand-accent) 38%, transparent);
+    background-color: color-mix(in oklab, var(--sage) 70%, transparent);
   }
   /* No grey flash on tap in mobile browsers; buttons give their own feedback. */
   a,
@@ -317,26 +236,12 @@
   white-space: nowrap;
 }
 
-/* Reports always print on the graph-sheet palette, whatever the screen theme,
-   and keep their chart fills. :is() lifts specificity above both dark scopes. */
+/* Reports print on white paper with the same inks, and keep their chart fills. */
 @media print {
-  :root:is([data-theme], :not([data-theme])) {
-    color-scheme: light;
+  :root {
     --background: #ffffff;
-    --foreground: #1b2a4e;
     --card: #ffffff;
-    --card-foreground: #1b2a4e;
     --popover: #ffffff;
-    --muted: #eef1e9;
-    --muted-foreground: #56627e;
-    --border: #d6dfcf;
-    --input: #c9d4c2;
-    --module-a13: #2f4fa8;
-    --module-a4: #d8961a;
-    --module-a5: #009c8b;
-    --module-c: #b4492f;
-    --module-d: #7a849c;
-    --brand-accent: #d8961a;
   }
   * {
     -webkit-print-color-adjust: exact;
